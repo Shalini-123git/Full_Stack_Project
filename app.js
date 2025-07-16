@@ -4,6 +4,7 @@ if(process.env.NODE_ENV != "production"){
 
 const express = require("express");
 const app = express();
+const port = process.env.PORT || 5000;
 const mongoose = require("mongoose");
 const User = require("./models/user.js");
 const Report = require("./models/reports.js");
@@ -145,6 +146,6 @@ app.post("/signUp/post",upload.single("image"), async (req, res, err) => {
     }
 })
 
-app.listen(5000, () => {
-    console.log("server is listening to port 5000");
+app.listen(port, () => {
+    console.log(`server is listening to port ${port}`);
 });
