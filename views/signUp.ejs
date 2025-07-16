@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Report</title>
+    <link rel="stylesheeet" href="/css/style.css">
+</head>
+<body>
+    <div class="body">
+        <h1>New registration:</h1>
+    <form method="POST" action="/signUp/post" enctype="multipart/form-data">
+        <label for="username">Username:</label>
+        <input 
+            type="text" 
+            name="username" 
+            placeholder="name" 
+            id="username"
+            required
+            >
+        <br/>
+        <label for="password">Password:</label>
+        <input 
+            type="password" 
+            name="password" 
+            id="password" 
+            required
+            >
+        <br/>
+        <label for="age">Age:</label>
+        <input
+            type="number"
+            name="age"
+            placeholder="Enter your age"
+            id="age"
+            required
+            >
+        <br/>
+        <label for="image">Upload Report:</label>
+        <input 
+            name="image"
+            type="file" 
+            id="image"
+           >
+        <br/>
+        <!-- <label for="time&date">Time & Date:</label>
+        <input type="datetime" name="time" id="time&date">
+        <br> -->
+        <button type="submit">Sign Up</button>
+    </form>
+    </div>
+</body>
+</html>
