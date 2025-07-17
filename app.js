@@ -14,7 +14,6 @@ const multer = require("multer");
 const { storage } = require("./cloudConfig.js");
 const upload = multer({storage});
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "secretkey";
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
@@ -78,45 +77,14 @@ app.post("/login", async(req, res) => {
     }else{
         const token = jwt.sign(
             {username},
-            "secretkey",
+            process.env.SECRET_KEY,
             {  expiresIn: "1h" },
         );
-    res.send(`User logged in sucessfully ${token} , this is token to access user information.`);
+        const userVer = await jwt.verify(token, process.env.SECRET_KEY);
+        console.log(userVer);
+        res.json(userVer);
 }
 });
-
-//generate token
-app.get("/login/profile", verifyToken, (req, res) => {
-    
-    jwt.verify(req.token, SECRET_KEY, (err, data) => {
-        if(err){
-            res.send("invalid token");
-        }else{
-            res.json({
-                message: "profile accessed",
-                data
-            })
-        }
-    })
-});
-
-
-//function to verify token
-function verifyToken(req, res, next){
-    
-    const bearerHeader = req.headers["authorization"];
-    
-    if(typeof bearerHeader != "undefined"){
-        const bearer = bearerHeader.split(" ");
-        const token = bearer[1];
-        req.token = token;
-        next();
-    }else{
-        res.send({
-            result: "Token is not valid"
-        })
-    }
-}
 
 //signUp
 app.get("/signUp", (req, res) => {
