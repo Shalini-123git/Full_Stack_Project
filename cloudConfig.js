@@ -10,7 +10,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: "Digital_Report",
+        folder: "Medical_Report",
         allowerdformets: ["pdf", "jpg"]
     }
 });

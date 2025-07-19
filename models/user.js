@@ -11,14 +11,10 @@ const userSchema = new mongoose.Schema({
     age: {
         type: Number
     },
-    image: {
-        url: String,
-        filename: String,
-    },
-    uploadedAt: {
-        type: Date,
-        default: Date.now(),
-    }
+    // image: {
+    //     url: String,
+    //     filename: String,
+    // }
 });
 
 module.exports = new mongoose.model("User", userSchema);
