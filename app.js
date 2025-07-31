@@ -10,8 +10,8 @@ const path = require("path");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-const userLogin = require("./routes/login.js");
-const userSignUp = require("./routes/signUp.js");
+const userRouter = require("./routes/users.js");
+const reports = require("./routes/reports.js");
 
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -53,13 +53,11 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(methodOverride("_method"));
 app.use(session(sessionOptions));
 
-app.use("/login", userLogin);
-app.use("/signUp", userSignUp);
+//middleware for routes
+app.use("/", userRouter);
 
-//index route
-app.get("/", (req, res) => {
-    res.render("index.ejs");
-});
+// reports route
+app.use("/report", reports);
 
 app.listen(port, () => {
     console.log(`server is listening to port ${port}`);
