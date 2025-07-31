@@ -4,17 +4,22 @@ const userSchema = new mongoose.Schema({
 
     username: {
         type: String,
+        required: true,
+        unique: true,
     },
     password: {
         type: String,
+        required: true
     },
-    age: {
-        type: Number
+    email: {
+        type: String,
+        required: true,
+        unique: true,
     },
-    // image: {
-    //     url: String,
-    //     filename: String,
-    // }
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
 });
 
 module.exports = new mongoose.model("User", userSchema);
