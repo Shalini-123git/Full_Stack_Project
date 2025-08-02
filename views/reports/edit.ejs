@@ -6,6 +6,33 @@
     <title>Digital Report</title>
 </head>
 <body>
-    <h>Edit Report:</h>
+    <h1>Edit Report:</h1>
+    <form method="put" action="/report/edit?_method=PUT" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input 
+            type="text"
+            placeholder="Ex: Blood Report, Ultrasound Report"
+            id="title"
+            name="title"
+        >
+        <br/>
+        <label for="description">Description:</label>
+        <input 
+            type="text"
+            placeholder="Enter Details"
+            id="description"
+            name="description"
+        >
+        <br/>
+        <label for="file">Upload Report:</label>
+        <input 
+            type="file"
+            placeholder="Choose your report"
+            id="file"
+            name="file"
+        >
+        <br/>
+        <button>Edit</button>
+    </form>
 </body>
 </html>
