@@ -24,7 +24,7 @@ module.exports.loginPostRouter = async(req, res) => {
                 {  expiresIn: "1h" },
             );
             console.log(token);
-            res.send("Token generated successfully")
+            res.render("reports/index.ejs");
         }
     } catch (err) {
         res.status(400).json({message: err.message})
@@ -50,7 +50,7 @@ module.exports.signupPostRouter = async (req, res) => {
         });
         const savedUser = await newUser.save();
         console.log(savedUser);
-        res.send("User signedUp successfully");
+        res.render("users/login.ejs");
 
     } catch(err) {
         console.error("Error while saving data", err.message);
