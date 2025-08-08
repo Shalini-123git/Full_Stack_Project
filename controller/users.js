@@ -12,19 +12,25 @@ module.exports.loginPostRouter = async(req, res) => {
     try {
         const { username, password } = req.body;
         const user = await User.findOne( { username });
-        console.log(user);
         if(!user){
             return res.json("user not found.... please insert valid username, email and password");
         }else{
             const isMatch = await bcrypt.compare(password, user.password);
             if(!isMatch) return res.status(400).json({message: "Invalid Credentials"});
             const token = jwt.sign(
-                { userId: user._id, username: user.username},
+                {user},
                 process.env.SECRET_KEY,
                 {  expiresIn: "1h" },
             );
-            console.log(token);
-            res.render("reports/index.ejs");
+
+            res.cookie("token", token, {
+                httpOnly: true,
+                //secure: true,
+                //maxAge: 1000000,
+                //signed: true,
+            })
+            
+            res.redirect("/report");
         }
     } catch (err) {
         res.status(400).json({message: err.message})
@@ -59,5 +65,6 @@ module.exports.signupPostRouter = async (req, res) => {
 };
 
 module.exports.logoutRouter = (req, res, next) => {
-    res.send("logged out");
+    res.clearCookie("token");
+    res.redirect("/");
 }
