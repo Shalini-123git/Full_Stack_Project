@@ -1,20 +1,16 @@
 const jwt = require("jsonwebtoken");
 
-const auth = async (req, res, next) => {
+module.exports.cookieJwtAuth = (req, res, next) => {
+    
     try {
-        const bearerHeader = req.headers["authorization"];
-        if(typeof bearerHeader != "undefined"){
-            const token = bearerHeader.split(" ")[1];
-            const user = jwt.verify(token, process.env.SECRET_KEY);
-            console.log(user);
-            req.token = user;
-            next()
-        }else{
-            res.status(401).json({message: "No Token Provided"});
-        }
+        const token = req.cookies.token;
+        if (!token) return res.status(401).json({ message: "Unauthorized" });
+        const user = jwt.verify(token, process.env.SECRET_KEY);
+        req.user = user;
+        console.log(req.user);
+        next();
     } catch (err) {
-        res.status(400).json({message: "Invalid or expired token"});
+        res.clearCookie("token");
+        return res.status(401).render("users/login.ejs", {message: "Invalid Or expired token"});
     }
 }
-
-module.exports = auth;
