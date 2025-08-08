@@ -28,37 +28,19 @@ module.exports.validateLogin = [
   }
 ];
 
-module.exports.authenticateUser = (req, res, next) => {
-  const token = req.cookies.token; 
-  
-  if (!token) return res.status(401).json({ message: "Unauthorized" });
-    
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Attach user info to request
-    next();
-  } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
-  }
-};
-
 module.exports.createReportValidator = [
 
   //check not empty fields
   check("title")
     .trim()
     .notEmpty()
-    .withMessage("Title is required")
-    .isLength({ max: 100 })
-    .withMessage("Title should be under 100 characters"),
+    .withMessage("Title is required"),
 
   check("description")
     .trim()
     .notEmpty()
-    .withMessage("Description is required")
-    .isLength({ max: 500 })
-    .withMessage("Description should be under 500 characters"),
-
+    .withMessage("Description is required"),
+  
     //check validation error
   (req, res, next) => {
     const errors = validationResult(req);
