@@ -57,7 +57,7 @@ app.use(session(sessionOptions));
 app.use("/", userRouter);
 
 // reports route
-app.use("/report" , reports);
+app.use("/report", reports);
 
 app.listen(port, () => {
     console.log(`server is listening to port ${port}`);
