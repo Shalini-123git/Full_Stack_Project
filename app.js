@@ -12,6 +12,8 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const userRouter = require("./routes/users.js");
 const reports = require("./routes/reports.js");
+const timelines = require("./routes/timeline.js");
+const reportHistory = require("./routes/medicalHistory.js");
 
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -58,6 +60,13 @@ app.use("/", userRouter);
 
 // reports route
 app.use("/report", reports);
+
+// timeline
+app.use("/timeline", timelines);
+
+//report History
+app.use("/medicalHistory", reportHistory);
+
 
 app.listen(port, () => {
     console.log(`server is listening to port ${port}`);
