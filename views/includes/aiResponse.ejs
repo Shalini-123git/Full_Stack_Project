@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai Response</title>
+</head>
+<body>
+    <h1>Ai Response</h1>
+    <p><%= response.text %></p>
+    <form method="post" action="/timeline/ai/response">
+      <input name="prompt" id="question" placeholder="Ask about symptoms, tests..." required>
+      <button>Ask Other question</button>
+    </form>
+    
+    <a href="/report">Back</a>
+</body>
+</html>
