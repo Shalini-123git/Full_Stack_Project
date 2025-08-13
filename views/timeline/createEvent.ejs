@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event</title>
+</head>
+<body>
+    <h1>Create Pregnancy Timeline Event</h1>
+
+    <form action="/timeline/<%= timeline.id %>/events" method="POST">
+        
+        <label for="title">Event Title:</label>
+        <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            placeholder="e.g. First Ultrasound" 
+            required
+        >
+        <br><br>
+
+        <label for="eventDate">Event Date:</label>
+        <input 
+            type="date" 
+            id="eventDate" 
+            name="eventDate" 
+            required
+        >
+        <br><br>
+
+        <label for="description">Description:</label>
+        <textarea 
+            id="description" 
+            name="description" 
+            placeholder="Details about the event...">
+        </textarea>
+        <br><br>
+
+        <button type="submit">Add Event</button>
+    </form>
+</body>
+</html>

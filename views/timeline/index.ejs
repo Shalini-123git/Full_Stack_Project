@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline</title>
+    <link href="/css/timeline.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Pregnancy Timelines</h1>
+    <a href="/timeline/create">Add New</a>
+    <br><br>
+
+    <a href="/timeline/<%= timelines[0].id %>/events">Add Event</a>
+    <br><br>
+    
+        <% if(timelines && timelines.length) {%>
+        <% for(let timeline of timelines) { %>
+            <div class="body">
+                <h3>pregnancyStartDate</h3>
+                <%= timeline.pregnancyStartDate.toDateString() %>
+                <h3>Due Date</h3>
+                <%= timeline.dueDate.toDateString() %> %>
+                <br><br>
+                <a href="/timeline/<%= timeline._id %>/edit">Edit</a>
+                <form action="/timeline/<%= timeline._id %>/delete" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Delete this timeline?')">Delete</button>
+                </form>
+                <form methos="get" action="/timeline/<%= timeline._id %>/showEvent">
+                    <button>Show Event</button>
+                </form>
+            </div>
+        <% } %>
+        <% } %>
+
+        <%- include('../includes/ai') %>
+       
+</body>
+</html>
