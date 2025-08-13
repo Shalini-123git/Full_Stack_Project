@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Report</title>
+</head>
+<body>
+    <div class="card">
+        <h1>All reports: </h1>
+        <p>Title: <%= report.title %></p>
+        <p>Description: <%= report.description %></p>
+        <p>File Url: <%= report.file.url %></p>
+        <p>Uploaded At: <%= report.uploadedAt %></p>
+        <form method="get" action="/report/<%= report._id %>/edit">
+            <button>Edit</button>
+        </form>
+        <form method="POST" action="/report/<%= report._id %>?_method=DELETE">
+            <button>Delete</button>
+        </form>
+    </div>
+</body>
+</html>

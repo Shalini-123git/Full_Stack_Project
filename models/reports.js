@@ -6,10 +6,16 @@ const reportSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    username: {
+    title: {
         type: String,
+        required: true,
+        trim: true
     },
-    image: {
+    description: {
+        type: String,
+        required: true,
+    },
+    file: {
         url: {
             type: String,
             required: true
@@ -18,7 +24,7 @@ const reportSchema = new mongoose.Schema({
     },
     uploadedAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     }  
 });
 
