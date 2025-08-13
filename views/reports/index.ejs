@@ -8,6 +8,16 @@
 </head>
 <body>
     <div>
+        <h1>Timeline:</h1>
+        <form method="get" action="/timeline">
+          <button>View Timeline</button>
+        </form>
+
+        <h1>Medical History</h1>
+        <form method="get" action="/medicalHistory">
+          <button>Medical History</button>
+        </form>
+
         <h1>All Reports</h1>
 
         <div class="newReport">
@@ -37,5 +47,8 @@
         <% } %>
         <% } %>
     </div>
+
+    <%- include('../includes/ai') %>
+    
 </body>
 </html>
