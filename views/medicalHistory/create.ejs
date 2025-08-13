@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Create Medical History</title>
+</head>
+<body>
+  <h1>Create Medical History</h1>
+
+  <form action="/medicalHistory/create" method="POST">
+
+    <!-- Pregnancy Start Date -->
+    <label>Pregnancy Start Date:</label>
+    <input type="date" name="pregnancyStartDate" required>
+    <br><br>
+
+    <!-- Due Date -->
+    <label>Due Date:</label>
+    <input type="date" name="dueDate">
+    <br><br>
+
+    <!-- Blood Type -->
+    <label>Blood Type:</label>
+    <select name="bloodType" required>
+      <option value="">--Select--</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+    </select>
+    <br><br>
+
+    <!-- Gravida -->
+    <label>Gravida:</label>
+    <input type="number" name="gravida" min="0" value="1">
+    <br><br>
+
+    <!-- Para -->
+    <label>Para:</label>
+    <input type="number" name="para" min="0" value="0">
+    <br><br>
+
+    <!-- Previous Pregnancy Complications -->
+    <label>Previous Pregnancy Complications:</label>
+    <textarea name="previousPregnancyComplications"></textarea>
+    <br><br>
+
+    <!-- Medical Conditions -->
+    <label>Medical Conditions:</label><br>
+    <input type="checkbox" name="medicalConditions" value="Diabetes"> Diabetes<br>
+    <input type="checkbox" name="medicalConditions" value="Hypertension"> Hypertension<br>
+    <input type="checkbox" name="medicalConditions" value="Thyroid"> Thyroid<br>
+    <input type="checkbox" name="medicalConditions" value="Asthma"> Asthma<br>
+    <input type="checkbox" name="medicalConditions" value="Heart Disease"> Heart Disease<br>
+    <input type="checkbox" name="medicalConditions" value="None"> None
+    <br><br>
+
+    <!-- Allergies -->
+    <label>Allergies:</label>
+    <input type="text" name="allergies" value="None">
+    <br><br>
+
+    <!-- Medications -->
+    <label>Medications:</label>
+    <input type="text" name="medications" value="None">
+    <br><br>
+
+    <!-- Vaccinations -->
+    <label>Vaccinations:</label><br>
+    <input type="checkbox" name="vaccinations[tetanus]" value="true"> Tetanus<br>
+    <input type="checkbox" name="vaccinations[flu]" value="true"> Flu<br>
+    <input type="checkbox" name="vaccinations[covid]" value="true"> Covid
+    <br><br>
+
+    <!-- Submit -->
+    <button type="submit">Create</button>
+
+  </form>
+</body>
+</html>

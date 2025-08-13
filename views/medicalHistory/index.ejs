@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical History</title>
+    <link href="/css/medicalHistory.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Medical History Records</h1>
+    <% for(let medicalhistory of medicalHistories) { %>
+        <div class="reportHistory">
+            <p><b>Vaccinations:</b>  <%= medicalhistory.vaccinations %></p>
+            <p><b>Pregnancy Start Date</b> :  <%= medicalhistory.pregnancyStartDate %></p>
+            <p><b>Blood Type:</b>  <%= medicalhistory.bloodType %></p>
+            <p><b>Gravida:</b>  <%= medicalhistory.gravida %></p>
+            <p><b>Parity:</b>  <%= medicalhistory.para %></p>
+            <p><b>Medical Conditions:</b>  <%= medicalhistory.medicalCondition %></p>
+            <p><b>Allergies: </b> <%= medicalhistory.allergies %></p>
+            <p><b>Medications:</b>  <%= medicalhistory.medication %></p>
+            <p><b>Created At:</b>  <%= medicalhistory.createdAt %></p>
+            <form action="/medicalHistory/<%= medicalhistory._id %>/show" method="get">
+                <button>View</button>
+            </form>
+        </div>
+    <% } %>
+    <form action="/medicalHistory/create" method="get">
+        <button>Add Medical Record</button>
+    </form>
+
+    <%- include('../includes/ai') %>
+</body>
+</html>
