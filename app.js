@@ -14,7 +14,12 @@ const userRouter = require("./routes/users.js");
 const reports = require("./routes/reports.js");
 const timelines = require("./routes/timeline.js");
 const reportHistory = require("./routes/medicalHistory.js");
-
+const babyLogs = require("./routes/babyActivity.js");
+const appointments = require("./routes/appointment");
+const customCron = require("./cron.js");
+const ejsMate = require("ejs-mate");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken")
 const dbUrl = process.env.ATLASDB_URL;
 
 main()
@@ -45,7 +50,8 @@ const sessionOptions = {
     store,
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {httpOnly: true, maxAge: 1000*60*60*24}  //1 day
 }
 
 app.set("view engine", "ejs");
@@ -54,6 +60,30 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(methodOverride("_method"));
 app.use(session(sessionOptions));
+app.engine("ejs", ejsMate);
+app.use(cookieParser());
+
+//check current logged-in user and store user in locals
+app.use((req, res, next) => {
+    if (req.cookies.token) {
+        try {
+            const user = jwt.verify(req.cookies.token, process.env.SECRET_KEY);
+            res.locals.currUser = user;
+            res.locals.currUserRole = user.user.role;
+        } catch (err) {
+        res.locals.currUser = null;
+        res.locals.currUserRole = null;
+        }
+    } else {
+        res.locals.currUser = null;
+        res.locals.currUserRole = null;
+    }
+    next();
+});
+
+
+//function call for email send
+customCron.sendMailAllUser();
 
 //middleware for routes
 app.use("/", userRouter);
@@ -67,6 +97,11 @@ app.use("/timeline", timelines);
 //report History
 app.use("/medicalHistory", reportHistory);
 
+//appointments
+app.use("/appointments", appointments);
+
+//baby Activity
+app.use("/activities", babyLogs);
 
 app.listen(port, () => {
     console.log(`server is listening to port ${port}`);
