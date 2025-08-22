@@ -7,33 +7,29 @@ module.exports.newReport = (req, res) => {
 
 //Post New Report
 module.exports.create = async(req, res) => {
-    try {
-        if (!req.user) {
+    
+    if (!req.user) {
         return res.status(401).json({ message: "Unauthorized: Invalid token" });
-        }
-        const userId = req.user.user._id;
-        const { title, description} = req.body;
-        if (!req.file) return res.status(400).send("No file uploaded");
-        const { path: url, filename } = req.file;
-
-        const report = new Report({
-            userId,
-            title,
-            description,
-            file: {
-                url,
-                filename,
-            }
-        });
-        
-        await report.save();      //save report
-
-        res.redirect("/report");
-
-    } catch (err) {
-        console.error("Error uploading report:", err);
-        res.status(500).json({message: err.message});
     }
+    const userId = req.user.user._id;
+    const { title, description} = req.body;
+    if (!req.file) return res.status(400).send("No file uploaded");
+    const { path: url, filename } = req.file;
+
+    const report = new Report({
+        userId,
+        title,
+        description,
+        file: {
+            url,
+            filename,
+        }
+    });
+        
+    await report.save();      //save report
+
+    res.redirect("/report");
+
 }
 
 //index route
@@ -54,17 +50,10 @@ module.exports.show =  async (req, res) => {
 
 //Edit Report
 module.exports.edit = async (req, res) => {
-    try {
+
     const report = await Report.findById(req.params.id);
-
-    if (!report) {
-        res.redirect("/report");
-    }
-
+    if (!report) return res.redirect("/report");
     res.render("reports/edit.ejs", { report});
-  } catch (err) {
-    res.status(500).send("Server Error");
-  }
 }
 
 //Update Report

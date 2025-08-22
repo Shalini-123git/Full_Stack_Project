@@ -15,27 +15,23 @@ module.exports.newMedicalHistory = (req, res) => {
 
 //create -> save
 module.exports.create = async (req, res) => {
-    try {
-        if(!req.user) {
-            return res.status(401).json({ message: "Unauthorized: Invalid token" });
-        }
-        const userId = req.user.user._id;
-        const data = req.body;
-        const { pregnancyStartDate, bloodType } = req.body;
-        const newMedicalHistory = new MedicalHistory({
-            userId, 
-            pregnancyStartDate,
-            bloodType,
-            data
-        });
-        console.log(newMedicalHistory)
-        await newMedicalHistory.save();
-
-        res.redirect("/medicalHistory");
-    } catch (err) {
-        console.error("Error uploading report:", err);
-        res.status(500).json({message: err.message});
+    
+    if(!req.user) {
+        return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
+    const userId = req.user.user._id;
+    const data = req.body;
+    const { pregnancyStartDate, bloodType } = req.body;
+    const newMedicalHistory = new MedicalHistory({
+        userId, 
+        pregnancyStartDate,
+        bloodType,
+        data
+    });
+    console.log(newMedicalHistory)
+    await newMedicalHistory.save();
+
+    res.redirect("/medicalHistory");
     
 }
 
