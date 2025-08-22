@@ -13,6 +13,9 @@ module.exports.validateLogin = [
   // check not empty fields
   check("username").not().isEmpty().trim().escape(),
   check("password").not().isEmpty().trim().escape(),
+  check("role")
+    .notEmpty().withMessage("Role is required")
+    .isIn(["mother", "caregiver", "doctor", "baby"]),
   
   //check validation error
   (req, res, next) => {
