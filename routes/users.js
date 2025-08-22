@@ -4,8 +4,10 @@ const userController = require("../controller/users.js");
 const { validateLogin } = require("../middleware/validation.js");
 
 //signUp
-router.get("/", userController.signupRouter);
-router.post("/signUp", userController.signupPostRouter)
+router.get("/", userController.index);
+router.route("/signUp")
+    .get(userController.signupRouter)
+    .post(userController.signupPostRouter)
 
 //login
 router.route("/login")

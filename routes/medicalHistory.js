@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { cookieJwtAuth } = require("../middleware/auth.js");
+const { cookieJwtAuth, restrictTo } = require("../middleware/auth.js");
 const cookieParser = require("cookie-parser");
 const medicalHistoryController = require("../controller/medicalHistory.js");
 
@@ -13,7 +13,9 @@ router.get("/", medicalHistoryController.index)
 //create -> form, save
 router.route("/create")
     .get(medicalHistoryController.newMedicalHistory)
-    .post(medicalHistoryController.create)
+    .post(
+        restrictTo("mother", "doctor"),
+        medicalHistoryController.create)
 
 //show
 router.get("/:id/show", medicalHistoryController.show)
@@ -21,10 +23,12 @@ router.get("/:id/show", medicalHistoryController.show)
 //edit 
 router.route("/:id/edit")
     .get(medicalHistoryController.edit)
-    .put(medicalHistoryController.update)
+    .put(
+        restrictTo("mother", "doctor"),
+        medicalHistoryController.update)
 
 //delete
-router.delete("/:id/delete", medicalHistoryController.delete)
+router.delete("/:id/delete", restrictTo("doctor"), medicalHistoryController.delete)
 
 
 module.exports = router;

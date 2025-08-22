@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {cookieJwtAuth} = require("../middleware/auth.js");
+const {cookieJwtAuth, restrictTo} = require("../middleware/auth.js");
 const {upload} = require("../cloudConfig.js");
 const { createReportValidator } = require("../middleware/validation.js");
 const cookieParser = require("cookie-parser");
@@ -13,6 +13,7 @@ router.use(cookieJwtAuth);
 router.route("/create")
     .get(reportController.newReport)
     .post(
+        restrictTo("mother", "doctor"),
         upload.single("file"), 
         createReportValidator, 
         reportController.create
@@ -25,11 +26,12 @@ router.get("/", reportController.index)
 router.route("/:id")
     .get(reportController.show)
     .put(
+        restrictTo("mother", "doctor"),
         upload.single("file"), 
         createReportValidator, 
         reportController.update
     )
-    .delete(reportController.delete)
+    .delete(restrictTo("doctor"), reportController.delete)
 
 //edit report
 router.get("/:id/edit", reportController.edit)
