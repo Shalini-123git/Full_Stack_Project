@@ -1,0 +1,119 @@
+<% layout('/layouts/boilerplate') -%>
+<body>
+  <h1>Log Baby Activity</h1>
+
+  <form action="/activities/create" method="POST">
+
+    <!-- Baby -->
+    <label for="baby">Select Baby</label>
+    <select name="baby" id="baby" required>
+      <% babies.forEach(baby => { %>
+        <option value="<%= baby._id %>"><%= baby.username %></option>
+      <% }) %>
+    </select>
+
+    <!-- Caregiver -->
+    <label for="caregiver">Caregiver</label>
+    <select name="caregiver" id="caregiver" required>
+      <% caregivers.forEach(cg => { %>
+        <option value="<%= cg._id %>"><%= cg.username %></option>
+      <% }) %>
+    </select>
+
+    <!-- Activity Type -->
+    <label for="activityType">Activity Type</label>
+    <select name="activityType" id="activityType" required onchange="highlightSection()">
+      <option value="">--Select--</option>
+      <option value="feed">Feed</option>
+      <option value="sleep">Sleep</option>
+      <option value="diaper">Diaper</option>
+      <option value="cry">Cry</option>
+    </select>
+
+    <!-- Feed Section -->
+    <div id="feedSection" class="section">
+      <h3>Feed</h3>
+      <label for="feedType">Feed Type</label>
+      <select name="feedType">
+        <option value="">--Select--</option>
+        <option value="breastmilk">Breastmilk</option>
+        <option value="formula">Formula</option>
+        <option value="solid">Solid</option>
+      </select>
+
+      <label for="amount">Amount (ml / g)</label>
+      <input type="number" name="amount">
+
+      <label for="side">Side</label>
+      <select name="side">
+        <option value="none">None</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+        <option value="both">Both</option>
+      </select>
+    </div>
+
+    <!-- Sleep Section -->
+    <div id="sleepSection" class="section">
+      <h3>Sleep</h3>
+      <label for="startTime">Start Time</label>
+      <input type="datetime-local" name="startTime">
+
+      <label for="endTime">End Time</label>
+      <input type="datetime-local" name="endTime">
+
+      <label for="duration">Duration (minutes)</label>
+      <input type="number" name="duration">
+
+      <label for="sleepQuality">Sleep Quality</label>
+      <select name="sleepQuality">
+        <option value="">--Select--</option>
+        <option value="good">Good</option>
+        <option value="fair">Fair</option>
+        <option value="poor">Poor</option>
+      </select>
+    </div>
+
+    <!-- Diaper Section -->
+    <div id="diaperSection" class="section">
+      <h3>Diaper</h3>
+      <label for="diaperType">Diaper Type</label>
+      <select name="diaperType">
+        <option value="">--Select--</option>
+        <option value="wet">Wet</option>
+        <option value="dirty">Dirty</option>
+        <option value="mixed">Mixed</option>
+      </select>
+    </div>
+
+    <!-- Cry Section -->
+    <div id="crySection" class="section">
+      <h3>Cry</h3>
+      <label for="cryDuration">Cry Duration (minutes)</label>
+      <input type="number" name="cryDuration">
+
+      <label for="cryReason">Cry Reason</label>
+      <input type="text" name="cryReason">
+    </div>
+
+    <!-- Notes -->
+    <label for="notes">Notes</label>
+    <textarea name="notes" rows="3"></textarea>
+
+    <button type="submit">Save Activity</button>
+  </form>
+
+  <script>
+    function highlightSection() {
+      let type = document.getElementById("activityType").value;
+
+      // Reset highlights
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("highlight"));
+
+      // Highlight the selected section
+      if (type) {
+        document.getElementById(type + "Section").classList.add("highlight");
+      }
+    }
+  </script>
+</body>

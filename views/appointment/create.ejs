@@ -1,0 +1,54 @@
+<% layout('/layouts/boilerplate') -%>
+<body>
+    <h1>Create Appointment</h1>
+
+    <form action="/appointments/create" method="POST">
+
+        <!-- Mother -->
+        <label for="mother">Mother</label>
+        <select name="mother" id="mother" required>
+            <% mothers.forEach(mother => { %>
+                <option value="<%= mother._id %>"><%= mother.username %></option>
+            <% }) %>
+        </select>
+        <br/>
+        <!-- Doctor -->
+        <label for="doctor">Doctor</label>
+        <select name="doctor" id="doctor" required>
+            <% doctors.forEach(doctor => { %>
+                <option value="<%= doctor._id %>"><%= doctor.username %></option>
+            <% }) %>
+        </select>
+        <br/>
+        <!-- Caregiver -->
+        <label for="caregiver">Caregiver (Optional)</label>
+        <select name="caregiver" id="caregiver">
+            <option value="">None</option>
+            <% caregivers.forEach(cg => { %>
+                <option value="<%= cg._id %>"><%= cg.username %></option>
+            <% }) %>
+        </select>
+        <br/>
+        <!-- Appointment Date -->
+        <label for="appointmentDate">Date & Time</label>
+        <input type="datetime-local" name="appointmentDate" id="appointmentDate" required>
+        <br/>
+        <!-- Reason -->
+        <label for="reason">Reason</label>
+        <textarea name="reason" id="reason" required></textarea>
+        <br/>
+        <!-- Notes -->
+        <label for="notes">Notes</label>
+        <textarea name="notes" id="notes"></textarea>
+        <br/>
+        <!-- Created By -->
+        <label for="createdBy">Booked By</label>
+        <select name="createdBy" id="createdBy" required>
+            <% bookingUsers.forEach(user => { %>
+                <option value="<%= user._id %>"><%= user.username %> (<%= user.role %>)</option>
+            <% }) %>
+        </select>
+        <br/>
+        <button type="submit">Create</button>
+    </form>
+</body>

@@ -1,0 +1,47 @@
+<% layout('/layouts/boilerplate') -%>
+<body>
+    <h1>All Baby Activities</h1>
+
+    <a href="/activities/create">+ Add Activity</a>
+
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Baby</th>
+                <th>Caregiver</th>
+                <th>Type</th>
+                <th>Details</th>
+                <th>Logged At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% activities.forEach(act => { %>
+                <tr>
+                    <td><%= act.baby?.name %></td>
+                    <td><%= act.caregiver?.username %></td>
+                    <td><%= act.activityType %></td>
+                    <td>
+                        <% if (act.activityType === "feed") { %>
+                            <%= act.feedType %> - <%= act.amount %>ml - Side: <%= act.side %>
+                        <% } else if (act.activityType === "sleep") { %>
+                            <%= act.duration %> mins - Quality: <%= act.sleepQuality %>
+                        <% } else if (act.activityType === "diaper") { %>
+                            <%= act.diaperType %>
+                        <% } else if (act.activityType === "cry") { %>
+                            <%= act.cryDuration %> mins (<%= act.cryReason %>)
+                        <% } %>
+                    </td>
+                    <td><%= act.createdAt.toLocaleString() %></td>
+                    <td>
+                        <a href="/activities/<%= act._id %>">View</a> | 
+                        <a href="/activities/<%= act._id %>/edit">Edit</a> | 
+                        <form action="/activities/<%= act._id %>?_method=DELETE" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Delete activity?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>

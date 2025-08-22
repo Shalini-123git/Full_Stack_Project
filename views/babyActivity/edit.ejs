@@ -1,0 +1,65 @@
+<% layout('/layouts/boilerplate') -%>
+<body>
+    <h1>Edit Activity</h1>
+
+    <form action="/activities/<%= activity._id %>?_method=PUT" method="POST">
+
+        <label for="activityType">Activity Type</label>
+        <select name="activityType" id="activityType" required>
+            <option value="feed" <%= activity.activityType === "feed" ? "selected" : "" %>>Feed</option>
+            <option value="sleep" <%= activity.activityType === "sleep" ? "selected" : "" %>>Sleep</option>
+            <option value="diaper" <%= activity.activityType === "diaper" ? "selected" : "" %>>Diaper</option>
+            <option value="cry" <%= activity.activityType === "cry" ? "selected" : "" %>>Cry</option>
+        </select>
+
+        <!-- Feed fields -->
+        <% if (activity.feedType || activity.activityType === "feed") { %>
+            <label for="feedType">Feed Type</label>
+            <input type="text" name="feedType" value="<%= activity.feedType || "" %>">
+
+            <label for="amount">Amount (ml)</label>
+            <input type="number" name="amount" value="<%= activity.amount || "" %>">
+
+            <label for="side">Side</label>
+            <input type="text" name="side" value="<%= activity.side || "" %>">
+        <% } %>
+
+        <!-- Sleep fields -->
+        <% if (activity.startTime || activity.endTime || activity.duration || activity.sleepQuality || activity.activityType === "sleep") { %>
+            <label for="startTime">Start Time</label>
+            <input type="datetime-local" name="startTime" value="<%= activity.startTime ? activity.startTime.toISOString().slice(0,16) : "" %>">
+
+            <label for="endTime">End Time</label>
+            <input type="datetime-local" name="endTime" value="<%= activity.endTime ? activity.endTime.toISOString().slice(0,16) : "" %>">
+
+            <label for="duration">Duration (mins)</label>
+            <input type="number" name="duration" value="<%= activity.duration || "" %>">
+
+            <label for="sleepQuality">Sleep Quality</label>
+            <input type="text" name="sleepQuality" value="<%= activity.sleepQuality || "" %>">
+        <% } %>
+
+        <!-- Diaper fields -->
+        <% if (activity.diaperType || activity.activityType === "diaper") { %>
+            <label for="diaperType">Diaper Type</label>
+            <input type="text" name="diaperType" value="<%= activity.diaperType || "" %>">
+        <% } %>
+
+        <!-- Cry fields -->
+        <% if (activity.cryDuration || activity.cryReason || activity.activityType === "cry") { %>
+            <label for="cryDuration">Cry Duration (mins)</label>
+            <input type="number" name="cryDuration" value="<%= activity.cryDuration || "" %>">
+
+            <label for="cryReason">Reason</label>
+            <input type="text" name="cryReason" value="<%= activity.cryReason || "" %>">
+        <% } %>
+
+        <!-- Notes (always visible if exists) -->
+        <label for="notes">Notes</label>
+        <textarea name="notes"><%= activity.notes || "" %></textarea>
+
+        <button type="submit">Update Activity</button>
+    </form>
+
+    <a href="/activities">Cancel</a>
+</body>

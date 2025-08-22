@@ -1,0 +1,47 @@
+<% layout('/layouts/boilerplate') -%>
+<body>
+    <h1>Edit appointment</h1>
+
+    <form method="POST" action="/appointments/<%= appointment[0].id %>?_method=PUT">
+
+        <!-- Mother -->
+        <label for="mother">Mother</label>
+        <select name="mother" id="mother" required>
+            <option value="<%= appointment[0].mother._id %>"><%= appointment[0].mother.username %></option>
+        </select>
+        <br/>
+        <!-- Doctor -->
+        <label for="doctor">Doctor</label>
+        <select name="doctor" id="doctor" required>
+            <option value="<%= appointment[0].doctor._id %>"><%= appointment[0].doctor.username %></option>
+        </select>
+        <br/>
+        <!-- Caregiver -->
+        <label for="caregiver">Caregiver (Optional)</label>
+        <select name="caregiver" id="caregiver">
+            <% if(appointment[0].caregiver) { %>
+                <option value="<%= appointment[0].caregiver._id %>"><%= appointment[0].caregiver.username %></option>
+            <% } else {%>
+                <p>no caregiver</p>
+            <% } %>
+        </select>
+        <br/>
+        <!-- Appointment Date -->
+        <label for="appointmentDate">Date & Time</label>
+        <input type="datetime-local" name="appointmentDate" id="appointmentDate" required>
+        <br/>
+        <!-- Reason -->
+        <label for="reason">Reason</label>
+        <textarea name="reason" id="reason" value="<%= appointment[0].reason %>" required><%= appointment[0].reason %></textarea>
+        <br/>
+        <!-- Notes -->
+        <label for="notes">Notes</label>
+        <textarea name="notes" id="notes" value=" <%= appointment[0].notes %>"> <%= appointment[0].notes %></textarea>
+        <br/>
+        <!-- Created By -->
+        <label for="createdBy">Booked By</label>
+        <input id="createdBy" value="<%= appointment[0].createdBy._id%>" name="createdBy">
+        <br/>
+        <button type="submit">Edit</button>
+    </form>
+</body>

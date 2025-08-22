@@ -1,0 +1,38 @@
+<% layout('/layouts/boilerplate') -%>
+<body>
+    <h1>index page:</h1>
+    <form method=get action="/appointments/create">
+        <button>Add Appointment</button>
+    </form>
+    <% if(appointment && appointment.length) { %>
+        <% for(let ap of appointment) { %>
+            <div class="appointment-card">
+                <p><strong>Mother:</strong> <%= ap.mother.username %></p>
+                <p><strong>Doctor:</strong> <%= ap.doctor.username %></p>
+
+                <% if (ap.caregiver) { %>
+                    <p><strong>Caregiver:</strong> <%= ap.caregiver.username %></p>
+                <% } else { %>
+                    <p><strong>Caregiver:</strong> None</p>
+                <% } %>
+
+                <p><strong>Booked By:</strong> <%= ap.createdBy.username %> (<%= ap.createdBy.role %>)</p>
+                <p><strong>Date & Time:</strong> <%= ap.appointmentDate.toLocaleString() %></p>
+                <p><strong>Reason:</strong> <%= ap.reason %></p>
+
+                <% if (ap.notes && ap.notes.trim() !== "") { %>
+                    <p><strong>Notes:</strong> <%= ap.notes %></p>
+                <% } else { %>
+                    <p><strong>Notes:</strong> None</p>
+                <% } %>
+
+                <p><strong>Created At:</strong> <%= ap.createdAt.toLocaleString() %></p>
+                <p><strong>Last Updated:</strong> <%= ap.updatedAt.toLocaleString() %></p>
+                    
+                <form method="get" action="/appointments/<%= ap.id %>">
+                    <button>View appointment</button>
+                </form>
+            </div>
+        <% } %>
+    <% } %>
+</body>
