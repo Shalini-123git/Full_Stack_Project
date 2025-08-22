@@ -5,6 +5,7 @@ const {upload} = require("../cloudConfig.js");
 const { createReportValidator } = require("../middleware/validation.js");
 const cookieParser = require("cookie-parser");
 const reportController = require("../controller/reports.js");
+const wrapAsync = require("../utils/wrapAsync.js");
 
 router.use(cookieParser());
 router.use(cookieJwtAuth);
@@ -16,11 +17,11 @@ router.route("/create")
         restrictTo("mother", "doctor"),
         upload.single("file"), 
         createReportValidator, 
-        reportController.create
+        wrapAsync(reportController.create)
     )
 
 //index route
-router.get("/", reportController.index)
+router.get("/", wrapAsync(reportController.index))
 
 //show report - update report - delete report
 router.route("/:id")
@@ -29,11 +30,11 @@ router.route("/:id")
         restrictTo("mother", "doctor"),
         upload.single("file"), 
         createReportValidator, 
-        reportController.update
+        wrapAsync(reportController.update)
     )
-    .delete(restrictTo("doctor"), reportController.delete)
+    .delete(restrictTo("doctor"), wrapAsync(reportController.delete))
 
 //edit report
-router.get("/:id/edit", reportController.edit)
+router.get("/:id/edit", wrapAsync(reportController.edit))
 
 module.exports = router;

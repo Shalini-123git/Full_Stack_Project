@@ -3,45 +3,46 @@ const router = express.Router();
 const {cookieJwtAuth, restrictTo} = require("../middleware/auth.js");
 const cookieParser = require("cookie-parser");
 const timelineController = require("../controller/timeline.js");
+const wrapAsync = require("../utils/wrapAsync.js");
 
 router.use(cookieParser());
 router.use(cookieJwtAuth);
 
 
 // READ - All timelines
-router.get("/", timelineController.index);
+router.get("/", wrapAsync(timelineController.index));
 
 // CREATE - form, save
 router.route("/create")
     .get(timelineController.create)
     .post(
         restrictTo("mother", "doctor"),
-        timelineController.newTimeline)
+        wrapAsync(timelineController.newTimeline))
 
 // UPDATE - Form, save changes
 router.route("/:id/edit")
-    .get( timelineController.edit)
+    .get( wrapAsync(timelineController.edit))
     .put(
         restrictTo("mother", "doctor"),
-        timelineController.update)
+        wrapAsync(timelineController.update))
 
 // DELETE
-router.post("/:id/delete", restrictTo("doctor"), timelineController.delete);
+router.post("/:id/delete", restrictTo("doctor"), wrapAsync(timelineController.delete));
 
 // timelineEvent
 router.route("/:id/events")
-    .get(timelineController.getEvent)
+    .get(wrapAsync(timelineController.getEvent))
     .post(
         restrictTo("mother", "doctor"),
-        timelineController.createEvent)
+        wrapAsync(timelineController.createEvent))
 
 //show event
-router.get("/:id/showEvent", timelineController.showEvent)
+router.get("/:id/showEvent", wrapAsync(timelineController.showEvent))
 
 //delete evnet
-router.delete("/:id/delete", restrictTo("doctor"), timelineController.deleteEvent)
+router.delete("/:id/delete", restrictTo("doctor"), wrapAsync(timelineController.deleteEvent))
 
 //get ai response
-router.post("/ai/response", timelineController.aiResponse)
+router.post("/ai/response", wrapAsync(timelineController.aiResponse))
 
 module.exports = router;
