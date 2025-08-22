@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Report</title>
-</head>
+<% layout('/layouts/boilerplate') -%>
 <body>
     <h1>Edit Report:</h1>
     <form method="POST" action="/report/<%= report._id %>?_method=PUT" enctype="multipart/form-data">
@@ -35,4 +29,3 @@
         <button>Edit</button>
     </form>
 </body>
-</html>

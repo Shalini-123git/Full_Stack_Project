@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical History</title>
-    <link href="/css/medicalHistory.css" rel="stylesheet">
-</head>
+<% layout('/layouts/boilerplate') -%>
 <body>
     <h1>Medical History Records</h1>
     <% for(let medicalhistory of medicalHistories) { %>
@@ -30,4 +23,3 @@
 
     <%- include('../includes/ai') %>
 </body>
-</html>

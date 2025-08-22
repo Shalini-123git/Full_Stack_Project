@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Report</title>
-    <link rel="stylesheeet" href="/css/style.css">
-</head>
+<% layout('/layouts/boilerplate') -%>
 <body>
     <div class="body">
-        <h1> Welcome to MotherLine </h1>
-        <p>A smart platform to track your pregnancy, store medical reports, and stay informed. </p>
-        <br>
         <h3>Create an Account:</h3>
         <form method="POST" action="/signUp">
             <label for="username">Username:</label>
@@ -38,10 +28,18 @@
                 placeholder="Enter Email" 
                 required>
             <br/>
+            <label for="role">Select Role</label>
+                <select name="role" id="role" required>
+                    <option value="">Select Role</option>
+                    <option value="mother" selected>Mother</option>
+                    <option value="caregiver">Caregiver</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="baby">Baby</option>
+                </select>
+            <br/>
             <button type="submit">Sign Up</button>
         </form>
         <p>Already have an account?</p>
         <a href="/login">Login here</a>
     </div>
 </body>
-</html>

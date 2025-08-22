@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Report</title>
-    <link rel="stylesheeet" href="/css/style.css">
-</head>
-<body>
+    <% layout('/layouts/boilerplate') -%>
     <div class="body">
     <h1>Welcome Back!</h1>
     <form method="POST" action="/login">
@@ -26,8 +18,15 @@
             placeholder="password" 
             required>
         <br/>
+        <label for="role">Select Role</label>
+            <select name="role" id="role" required>
+                <option value="">Select Role</option>
+                <option value="mother" selected>Mother</option>
+                <option value="caregiver">Caregiver</option>
+                <option value="doctor">Doctor</option>
+                <option value="baby">Baby</option>
+            </select>
+        <br/>
         <button type="submit">Login</button>
     </form>
     </div>
-</body>
-</html>

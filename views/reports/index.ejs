@@ -1,54 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report</title>
-    <link href="/css/style.css" rel="stylesheet">
-</head>
-<body>
-    <div>
-        <h1>Timeline:</h1>
-        <form method="get" action="/timeline">
-          <button>View Timeline</button>
-        </form>
-
-        <h1>Medical History</h1>
-        <form method="get" action="/medicalHistory">
-          <button>Medical History</button>
-        </form>
-
-        <h1>All Reports</h1>
-
-        <div class="newReport">
-          <form method="get" action="/report/create">
-            <button>Create New Report</button>
-          </form>
-        </div>
-        
-        <a class="userLogout" href="/logout">Logout</a>
-
-        <% if(reports && reports.length) {%>
-        <% for(let report of reports) { %>
-  
-              <div class="report-card">
-                
-                <div >
-                  <p><b>Username: <%= report.userId.username %></b></p>
-                  <p ><%= report.title %></p>
-                  <p><%= report.description %></p>
-                  <p><%= report.userId.email %></p>
-                  <p>Uploaded At: <%= report.uploadedAt %></p>
-                <form method="get" action="/report/<%= report._id %>">
-                    <button>View Report</button>
-                </form>
-                </div>
-              </div>
-        <% } %>
-        <% } %>
+<% layout('/layouts/boilerplate') -%>
+  <div>
+    <h1>All Reports</h1>
+    <div class="newReport">
+      <form method="get" action="/report/create">
+        <button>Create New Report</button>
+      </form>
     </div>
+        
+    <a class="userLogout" href="/logout">Logout</a>
 
-    <%- include('../includes/ai') %>
-    
+    <% if(reports && reports.length) {%>
+    <% for(let report of reports) { %>
+  
+    <div class="report-card">
+      <div >
+        <p><b>Username: <%= report.userId.username %></b></p>
+        <p ><%= report.title %></p>
+        <p><%= report.description %></p>
+        <p><%= report.userId.email %></p>
+        <p>Uploaded At: <%= report.uploadedAt %></p>
+        <form method="get" action="/report/<%= report._id %>">
+          <button>View Report</button>
+        </form>
+      </div>
+    </div>
+    <% } %>
+    <% } %>
+  </div>
+
+<%- include('../includes/ai') %>
 </body>
-</html>
