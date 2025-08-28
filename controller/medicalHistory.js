@@ -67,5 +67,5 @@ module.exports.update = async (req, res) => {
 //delete
 module.exports.delete = async (req, res) => {
     await MedicalHistory.findByIdAndDelete(req.params.id);
-    res.redirect("/medicalHistory");
+    res.redirect("/admin/medicalHistory");
 }

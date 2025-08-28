@@ -73,6 +73,6 @@ module.exports.update = async (req, res) => {
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
     await Report.findByIdAndDelete(id);
-    res.redirect("/report");
+    res.redirect("/admin/report");
 }
 

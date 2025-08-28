@@ -63,6 +63,6 @@ module.exports.delete = async (req, res) => {
     const { id } = req.params;
     await Appointment.findByIdAndDelete(id);
     
-    res.redirect(`/appointments`);
+    res.redirect(`/admin/appointments`);
 }
 
