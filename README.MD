@@ -5,7 +5,7 @@ It provides secure medical record storage, AI-powered mental health features, ca
 
 ---
 
-## 🚀 Features
+## Features
 - User Registration & Authentication (JWT/Firebase)
 - Secure Medical Report Upload with Images
 - Doctor Checklist API (week-wise logic)
@@ -17,7 +17,7 @@ It provides secure medical record storage, AI-powered mental health features, ca
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 - **Backend:** Node.js, Express.js  
 - **Frontend:** React.js  
 - **Database:** MongoDB + Mongoose  
