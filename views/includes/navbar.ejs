@@ -15,10 +15,11 @@
             <a class="nav-link" href="/activities">Feed/Sleep Logs</a>
         <% } else { %>
           <% if (currUserRole === "doctor") { %>
-            <a class="nav-link" href="/report">Medical Reports</a>
-            <a class="nav-link" href="/medicalHistory">Medical History</a>
-            <a class="nav-link" href="/timeline">Timeline</a>
-            <a class="nav-link" href="/appointments">Appointments</a>
+            <a class="nav-link" href="/admin/report">View Medical Reports</a>
+            <a class="nav-link" href="/admin/medicalHistory">View Medical History</a>
+            <a class="nav-link" href="/admin/timeline">View Timeline</a>
+            <a class="nav-link" href="/admin/appointments">View Appointments</a>
+            <a class="nav-link" href="/admin/checklist">View checklist</a>
           <% } %>
 
           <% if (currUserRole === "caregiver") { %>

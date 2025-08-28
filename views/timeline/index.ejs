@@ -2,29 +2,56 @@
 <body>
     <h1>Pregnancy Timelines</h1>
     <a href="/timeline/create">Add New</a>
-    <br><br>
+    <br>
+    <a href="/timeline/<%= timeline.id %>/events">Add Event</a>
+    <br>
+    <a href="/timeline/<%= timeline.id %>/events">Add milestones</a>
+    <br>
+    <h1>Pregnancy Timeline</h1>
 
-    <a href="/timeline/<%= timelines[0].id %>/events">Add Event</a>
-    <br><br>
-    
-        <% if(timelines && timelines.length) {%>
-        <% for(let timeline of timelines) { %>
-            <div class="body">
-                <h3>pregnancyStartDate</h3>
-                <%= timeline.pregnancyStartDate.toDateString() %>
-                <h3>Due Date</h3>
-                <%= timeline.dueDate.toDateString() %> %>
-                <br><br>
-                <a href="/timeline/<%= timeline._id %>/edit">Edit</a>
-                <form action="/timeline/<%= timeline._id %>/delete" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Delete this timeline?')">Delete</button>
-                </form>
-                <form methos="get" action="/timeline/<%= timeline._id %>/showEvent">
-                    <button>Show Event</button>
-                </form>
-            </div>
-        <% } %>
-        <% } %>
+  <% if (timeline) { %>
+    <div class="box">
+      <p><strong>Pregnancy Start Date:</strong> <%= timeline.pregnancyStartDate %></p>
+      <p><strong>Due Date:</strong> <%= timeline.dueDate ? timeline.dueDate : "Not set" %></p>
+    </div>
+
+    <h2>Events</h2>
+    <% if (timeline.events && timeline.events.length > 0) { %>
+      <% timeline.events.forEach(event => { %>
+        <div class="box">
+          <p><strong>Title:</strong> <%= event.title %></p>
+          <p><strong>Date:</strong> <%= event.eventDate%></p>
+          <p><strong>Category:</strong> <%= event.category %></p>
+          <p><strong>Description:</strong> <%= event.description || "No description" %></p>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No events yet.</p>
+    <% } %>
+
+    <h2>Weekly Progress</h2>
+    <% if (timeline.weeks && timeline.weeks.length > 0) { %>
+      <% timeline.weeks.forEach(week => { %>
+        <div class="box">
+          <p><strong>Week:</strong> <%= week.week %> (<%= week.trimester %> trimester)</p>
+          <% if (week.milestones && week.milestones.length > 0) { %>
+            <ul>
+              <% week.milestones.forEach(m => { %>
+                <li><%= m.title %> - <%= m.status %></li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p>No milestones</p>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No weekly milestones yet.</p>
+    <% } %>
+
+  <% } else { %>
+    <p>No timeline found for this user.</p>
+  <% } %>
 
         <%- include('../includes/ai') %>
        

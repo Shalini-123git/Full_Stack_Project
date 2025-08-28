@@ -16,7 +16,7 @@
     <form method="GET" action="/medicalHistory/<%= medicalHistory.id %>/edit">
         <button>Edit</button>
     </form>
-    <form method="POST" action="/medicalHistory/<%= medicalHistory.id %>/delete?_method=DELETE">
+    <form method="POST" action="/medicalHistory/admin/<%= medicalHistory.id %>/delete?_method=DELETE">
         <button>Delete</button>
     </form>
     <a href="/medicalHistory">back</a>

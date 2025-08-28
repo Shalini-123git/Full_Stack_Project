@@ -28,7 +28,7 @@
     <form method="get" action="/appointments/<%= appointment[0].id %>/edit">
         <button>Edit</button>
     </form>
-    <form method="POST" action="/appointments/<%= appointment[0].id %>?_method=DELETE">
+    <form method="POST" action="/appointments/admin/<%= appointment[0].id %>?_method=DELETE">
         <button>Delete</button>
     </form>
     <a href="/appointments">Back to Appointments</a>
