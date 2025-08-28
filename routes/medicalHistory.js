@@ -29,7 +29,7 @@ router.route("/:id/edit")
         wrapAsync(medicalHistoryController.update))
 
 //delete
-router.delete("/:id/delete", restrictTo("doctor"), wrapAsync(medicalHistoryController.delete))
+router.delete("/admin/:id/delete", restrictTo("doctor"), wrapAsync(medicalHistoryController.delete))
 
 
 module.exports = router;
