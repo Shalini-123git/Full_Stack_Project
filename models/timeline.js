@@ -33,6 +33,35 @@ const timelineEventSchema = new mongoose.Schema({
     ]
 });
 
+const milestoneSchema = new mongoose.Schema({
+    title: { 
+        type: String, 
+        required: true
+    },
+    description: String,
+    status: { 
+        type: String, 
+        enum: ["pending", "completed", "skipped"], 
+        default: "pending" 
+    },
+    dueDate: Date
+});
+
+const pregnancyMilestoneSchema = new mongoose.Schema({
+    week: {
+        type: Number,
+        required: true,
+        min: 1, 
+        max: 42
+    },
+    trimester: {
+        type: String,
+        enum: ["First", "Second", "Third"],
+        required: true,
+    },
+    milestones: [milestoneSchema]
+});
+
 const timelineSchema = new mongoose.Schema({
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
@@ -45,6 +74,7 @@ const timelineSchema = new mongoose.Schema({
     },
     dueDate: Date,
     events: [timelineEventSchema],
+    weeks: [pregnancyMilestoneSchema],
     createdAt: { 
         type: Date, 
         default: Date.now 
