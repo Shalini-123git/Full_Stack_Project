@@ -1,5 +1,6 @@
 const Timeline = require("../models/timeline.js");
 const { GoogleGenAI } = require("@google/genai");
+const { generatePregnancyWeeks, getCurrentPregnancyWeek } = require("../utils/pregnancyChecklist.js");
 
 module.exports.create = (req, res) => {
     res.render("timeline/create.ejs");
@@ -7,36 +8,31 @@ module.exports.create = (req, res) => {
 
 module.exports.newTimeline = async (req, res) => {
     const { pregnancyStartDate } = req.body;
-
-    if(!pregnancyStartDate) {
-        return res.status(400).json({message: "Pregnancy start date is required"})
-    }
-         
     // Calculate due date (280 days after start date)
     const dueDate = new Date(pregnancyStartDate);
     dueDate.setDate(dueDate.getDate() + 280);
-
-    // Create timeline in DB
-    const newTimeline = new Timeline({
-        userId: req.user.user._id, // comes from JWT middleware
+    const timeline = new Timeline({
+        userId: req.user.user._id,
         pregnancyStartDate,
         dueDate,
-        
+        weeks: generatePregnancyWeeks(),   // <-- auto-fill weeks
     });
-
-    await newTimeline.save();
+    console.log(timeline)
+    await timeline.save();
 
     res.redirect("/timeline");
 }
 
 module.exports.index = async (req, res) => {
-    const userId = req.user.user._id;
-    const timelines = await Timeline.find({userId}).populate("userId");
+    const timeline = await Timeline.findOne({ userId: req.user.user._id });
 
-    if(timelines.length == 0) {
-        return res.redirect("/timeline/create");
+    if (!timeline) {
+      return res.status(404).json({ message: "Timeline not found" });
     }
-    res.render("timeline/index.ejs", { timelines });
+
+    const currentWeek = getCurrentPregnancyWeek(timeline.pregnancyStartDate);
+    console.log(currentWeek)
+    res.render("timeline/index.ejs", {timeline});
 }
 
 module.exports.edit = async (req, res) => {
