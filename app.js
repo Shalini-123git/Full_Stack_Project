@@ -21,6 +21,9 @@ const ejsMate = require("ejs-mate");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken")
 const dbUrl = process.env.ATLASDB_URL;
+const chatBot = require("./routes/chatBot.js");
+const checklistRoutes = require("./routes/checklist");
+const adminRoute = require("./routes/admin.js");
 
 main()
    .then(() => {
@@ -102,6 +105,15 @@ app.use("/appointments", appointments);
 
 //baby Activity
 app.use("/activities", babyLogs);
+
+//whatsapp Bot
+app.use("/api", chatBot);
+
+//week wise checklist
+app.use("/api/checklist", checklistRoutes);
+
+//admin(doctor) route
+app.use("/admin", adminRoute);
 
 app.listen(port, () => {
     console.log(`server is listening to port ${port}`);
