@@ -1,0 +1,43 @@
+<% layout("layouts/boilerplate") %>
+<body>
+  <h1>Enter Bill Details</h1>
+  <form action="/bills/upload" method="POST">
+    <label for="hospital">Hospital Name:</label>
+    <input type="text" id="hospital" name="hospital" required><br><br>
+
+    <h3>Items</h3>
+    <div id="items">
+      <div class="item">
+        <input type="text" name="items[0][name]" placeholder="Item name" required>
+        <input type="number" name="items[0][cost]" placeholder="Cost" required>
+        <span class="remove-btn" onclick="removeItem(this)">❌</span>
+      </div>
+    </div>
+    <button type="button" onclick="addItem()">➕ Add Item</button><br><br>
+
+    <button type="submit">Submit Bill</button>
+  </form>
+
+  <script>
+    let index = 1;
+
+    // Add item dynamically
+    function addItem() {
+      const container = document.getElementById('items');
+      const div = document.createElement('div');
+      div.classList.add('item');
+      div.innerHTML = `
+        <input type="text" name="items[${index}][name]" placeholder="Item name" required>
+        <input type="number" name="items[${index}][cost]" placeholder="Cost" required>
+        <span class="remove-btn" onclick="removeItem(this)">❌</span>
+      `;
+      container.appendChild(div);
+      index++;
+    }
+
+    // Remove item before submitting
+    function removeItem(button) {
+      button.parentElement.remove();
+    }
+  </script>
+</body>

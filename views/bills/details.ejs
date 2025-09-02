@@ -1,0 +1,17 @@
+<% layout("layouts/boilerplate") %>
+<body>
+  <h2>Bill for <%= bill.hospital %></h2>
+  <p>Total Amount: ₹<%= bill.total %></p>
+
+  <h3>Breakdown:</h3>
+  <ul>
+    <% bill.items.forEach(item => { %>
+      <li>
+        <%= item.name %> - ₹<%= item.cost %> 
+        <% if (item.isOvercharged) { %>
+          <strong style="color:red;">(Overcharged!)</strong>
+        <% } %>
+      </li>
+    <% }) %>
+  </ul>
+</body>

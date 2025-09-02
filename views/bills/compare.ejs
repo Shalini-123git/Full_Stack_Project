@@ -1,0 +1,35 @@
+<% layout("layouts/boilerplate") %>
+<body>
+  <h1>Hospital Cost Comparison</h1>
+
+  <% if (hospitals && hospitals.length > 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Hospital</th>
+          <th>Department</th>
+          <th>Average Cost</th>
+          <th>Ethics Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% hospitals.forEach(hospital => { %>
+          <tr>
+            <td><%= hospital.name %></td>
+            <td><%= hospital.department || "General" %></td>
+            <td>₹ <%= hospital.avgCost %></td>
+            <td>
+              <% if (hospital.ethicsRating >= 4) { %>
+                <span class="tag fair">Good</span>
+              <% } else { %>
+                <span class="tag expensive">Needs Review</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>No hospital data available yet.</p>
+  <% } %>
+</body>
