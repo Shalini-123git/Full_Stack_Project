@@ -27,3 +27,13 @@ module.exports.restrictTo = (...roles) => {
         next();
     };
 };
+
+module.exports.isAdmin = (req, res, next) => {
+  if (req.user && req.user.user.role === "admin") {
+    return next(); // allow access
+  } else{
+    return res.status(403).json({
+      message: "Access denied, only admin can access this"
+  });
+  }
+};
