@@ -36,3 +36,53 @@ body{
     text-decoration: underline;
 }
 
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f5f6fa;
+}
+h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background: #3498db;
+    color: white;
+}
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+.tag {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.fair {
+    background: #2ecc71;
+    color: white;
+}
+.expensive {
+    background: #e74c3c;
+    color: white;
+}
+
+.item { margin-bottom: 10px; }
+    .item input { margin-right: 5px; }
+    .remove-btn { color: red; cursor: pointer; }
+
+ table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background: blue; }
+    select { padding: 6px; margin-bottom: 15px; }
