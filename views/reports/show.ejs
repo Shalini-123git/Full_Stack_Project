@@ -1,16 +1,23 @@
 <% layout('/layouts/boilerplate') -%>
 <body>
+    <form action="/report/<%= report._id %>/generatePdf" method="GET">
+        <button>Download Pdf</button>
+    </form>
     <div class="card">
-        <h1>All reports: </h1>
+        <h1>Medical Report:</h1>
         <p>Title: <%= report.title %></p>
         <p>Description: <%= report.description %></p>
         <p>File Url: <%= report.file.url %></p>
         <p>Uploaded At: <%= report.uploadedAt %></p>
+        <% if (currUserRole === "doctor" || currUserRole === "admin") { %>
         <form method="get" action="/report/<%= report._id %>/edit">
             <button>Edit</button>
         </form>
+        <% } %>
+        <% if (currUserRole === "admin") { %>
         <form method="POST" action="/report/<%= report._id %>?_method=DELETE">
             <button>Delete</button>
         </form>
+        <% } %>
     </div>
 </body>

@@ -1,6 +1,9 @@
 <% layout('/layouts/boilerplate') -%>
 <body>
     <h1>Medical Report History</h1>
+    <form action="/medicalHistory/<%= medicalHistory.id %>/generatePdf" method="GET">
+        <button>Download Pdf</button>
+    </form>
     <div class="reportHistory">
         <p><b>Id:</b>  <%= medicalHistory.id %></p>
         <p><b>Vaccinations:</b>  <%= medicalHistory.vaccinations %></p>
@@ -13,11 +16,15 @@
         <p><b>Medications:</b>  <%= medicalHistory.medication %></p>
         <p><b>Created At:</b>  <%= medicalHistory.createdAt %></p>
     </div>
+    <% if (currUserRole === "doctor" || currUserRole === "admin") { %>
     <form method="GET" action="/medicalHistory/<%= medicalHistory.id %>/edit">
         <button>Edit</button>
     </form>
+    <% } %>
+    <% if (currUserRole === "admin") { %>
     <form method="POST" action="/medicalHistory/admin/<%= medicalHistory.id %>/delete?_method=DELETE">
         <button>Delete</button>
     </form>
+    <% } %>
     <a href="/medicalHistory">back</a>
 </body>
