@@ -1,4 +1,5 @@
 const Report = require("../models/reports.js");
+const generatePdfFromRoute = require("../utils/pdfGenerator.js")
 
 //Create New Report
 module.exports.newReport = (req, res) => {
@@ -46,6 +47,21 @@ module.exports.show =  async (req, res) => {
     const { id } = req.params;
     const report = await Report.findById(id);
     res.render("reports/show.ejs", {report});
+}
+
+//Print
+module.exports.printView = async (req, res) => {
+    const { id } = req.params;
+    const report = await Report.findById(id);
+    
+    res.render("reports/printView", {report});
+}
+
+module.exports.generatePdf = async (req, res) => {
+    const url = `${req.protocol}://${req.get("host")}/report/${req.params.id}/printView`;
+    const fileName = `Report.pdf`;
+
+    await generatePdfFromRoute(url, fileName, req, res);
 }
 
 //Edit Report

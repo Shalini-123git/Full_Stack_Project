@@ -1,6 +1,7 @@
 const Timeline = require("../models/timeline.js");
 const { GoogleGenAI } = require("@google/genai");
 const { generatePregnancyWeeks, getCurrentPregnancyWeek } = require("../utils/pregnancyChecklist.js");
+const generatePdfFromRoute = require("../utils/pdfGenerator.js");
 
 module.exports.create = (req, res) => {
     res.render("timeline/create.ejs");
@@ -33,6 +34,25 @@ module.exports.index = async (req, res) => {
     const currentWeek = getCurrentPregnancyWeek(timeline.pregnancyStartDate);
     console.log(currentWeek)
     res.render("timeline/index.ejs", {timeline});
+}
+
+//Print
+module.exports.printView = async (req, res) => {
+    const timeline = await Timeline.findOne({ userId: req.user.user._id });
+
+    if (!timeline) {
+      return res.status(404).json({ message: "Timeline not found" });
+    }
+    getCurrentPregnancyWeek(timeline.pregnancyStartDate);
+
+    res.render("timeline/timeline", {timeline});
+}
+
+module.exports.generatePdf = async (req, res) => {
+    const url = `${req.protocol}://${req.get("host")}/timeline/printView`;
+    const fileName = `Timeline.pdf`;
+
+    await generatePdfFromRoute(url, fileName, req, res);
 }
 
 module.exports.edit = async (req, res) => {

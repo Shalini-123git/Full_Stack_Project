@@ -1,4 +1,5 @@
-const MedicalHistory = require("../models/medicalHistory.js")
+const MedicalHistory = require("../models/medicalHistory.js");
+const generatePdfFromRoute = require("../utils/pdfGenerator.js");
 
 //index
 module.exports.index = async (req, res) => {
@@ -41,6 +42,21 @@ module.exports.show = async (req, res) => {
     const medicalHistory = await MedicalHistory.findById(id);
     
     res.render("medicalHistory/show.ejs", {medicalHistory});
+}
+
+//Print
+module.exports.printView = async (req, res) => {
+    const { id } = req.params;
+    const medicalHistory = await MedicalHistory.findById(id);
+    
+    res.render("medicalHistory/printView", {medicalHistory});
+}
+
+module.exports.generatePdf = async (req, res) => {
+    const url = `${req.protocol}://${req.get("host")}/medicalHistory/${req.params.id}/printView`;
+    const fileName = `MedicalHistory.pdf`;
+
+    await generatePdfFromRoute(url, fileName, req, res);
 }
 
 //edit
