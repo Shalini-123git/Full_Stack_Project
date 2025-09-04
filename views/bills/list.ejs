@@ -3,12 +3,8 @@
   <h2>Upload Hospital Bill</h2>
 
   <form action="/bills/upload" method="POST" enctype="multipart/form-data">
-    <label>Hospital Name:</label><br>
-    <input type="text" name="hospital" required><br><br>
-
-    <label for="file">Upload Bill (PDF/Image):</label><br>
-    <input type="file" id="file" name="billFile" accept=".pdf,image/*"><br><br>
-
+    <label for="hospitalName">Hospital Name:</label><br>
+    <input type="text" id="hospitalName" name="hospital" required><br><br>
     <h3>Bill Items</h3>
     <div id="items-container">
       <div class="item-row">
@@ -23,4 +19,25 @@
 
     <button type="submit">Submit Bill</button>
   </form>
+   <script>
+    function addItem() {
+      const container = document.getElementById("items-container");
+
+      // Create new item row
+      const newRow = document.createElement("div");
+      newRow.classList.add("item-row");
+
+      newRow.innerHTML = `
+        <input type="text" name="items[][name]" placeholder="Item name" required>
+        <input type="number" name="items[][cost]" placeholder="Cost" required>
+        <button type="button" onclick="removeItem(this)">❌</button>
+      `;
+
+      container.appendChild(newRow);
+    }
+
+    function removeItem(button) {
+      button.parentElement.remove();
+    }
+  </script>
 </body>
