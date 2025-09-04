@@ -1,0 +1,47 @@
+<% layout("layouts/boilerplate") %>
+<body>
+  <h1>Daily Mood Journal</h1>
+
+  <form action="/moodjournal/Create" method="POST">
+    <!-- Mood Emoji -->
+    <label for="moodEmoji">How do you feel today?</label>
+    <select name="moodEmoji" id="moodEmoji" required>
+      <option value="">-- Select Mood --</option>
+      <option value="😊">😊 Happy</option>
+      <option value="😐">😐 Neutral</option>
+      <option value="😔">😔 Sad</option>
+      <option value="😟">😟 Anxious</option>
+      <option value="😴">😴 Tired</option>
+    </select>
+
+    <!-- Stress Level -->
+    <label for="stressLevel">Stress Level (1-10)</label>
+    <input type="number" name="stressLevel" id="stressLevel" min="1" max="10">
+
+    <!-- Energy Level -->
+    <label for="energyLevel">Energy Level (1-10)</label>
+    <input type="number" name="energyLevel" id="energyLevel" min="1" max="10">
+
+    <!-- Gratitude Note -->
+    <label for="gratitudeNote">Today I’m grateful for...</label>
+    <textarea name="gratitudeNote" id="gratitudeNote" maxlength="300"></textarea>
+
+    <!-- Stress Note -->
+    <label for="stressNote">Stress triggers</label>
+    <textarea name="stressNote" id="stressNote" maxlength="300"></textarea>
+
+    <!-- Free Thoughts -->
+    <label for="freeThoughts">Free thoughts / journaling</label>
+    <textarea name="freeThoughts" id="freeThoughts" maxlength="1000"></textarea>
+
+    <!-- CBT Prompt + Response -->
+    <label for="cbtResponse">CBT Prompt Response</label>
+    <textarea name="cbtResponse" id="cbtResponse"></textarea>
+
+    <!-- Supportive Message -->
+    <label for="scheduledMessage">Supportive message from family</label>
+    <textarea name="scheduledMessage" id="scheduledMessage"></textarea>
+
+    <button type="submit">Save Journal</button>
+  </form>
+</body>
