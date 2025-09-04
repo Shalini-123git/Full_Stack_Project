@@ -34,6 +34,9 @@ router.route("/:id")
     )
     .delete(restrictTo("doctor"), wrapAsync(reportController.delete))
 
+router.get("/:id/printView", wrapAsync(reportController.printView))
+router.get("/:id/generatePdf", wrapAsync(reportController.generatePdf))
+
 //edit report
 router.get("/:id/edit", wrapAsync(reportController.edit))
 

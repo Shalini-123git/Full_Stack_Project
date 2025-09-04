@@ -12,6 +12,9 @@ router.use(cookieJwtAuth);
 // READ - All timelines
 router.get("/", wrapAsync(timelineController.index));
 
+router.get("/printView", wrapAsync(timelineController.printView))
+router.get("/generatePdf", wrapAsync(timelineController.generatePdf))
+
 // CREATE - form, save
 router.route("/create")
     .get(timelineController.create)

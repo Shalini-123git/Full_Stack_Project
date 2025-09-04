@@ -20,16 +20,17 @@ router.route("/create")
 
 //show
 router.get("/:id/show", wrapAsync(medicalHistoryController.show))
-
+router.get("/:id/printView", wrapAsync(medicalHistoryController.printView))
+router.get("/:id/generatePdf", wrapAsync(medicalHistoryController.generatePdf))
 //edit 
 router.route("/:id/edit")
     .get(wrapAsync(medicalHistoryController.edit))
     .put(
-        restrictTo("mother", "doctor"),
+        restrictTo("doctor", "admin"),
         wrapAsync(medicalHistoryController.update))
 
 //delete
-router.delete("/admin/:id/delete", restrictTo("doctor"), wrapAsync(medicalHistoryController.delete))
+router.delete("/admin/:id/delete", restrictTo("admin"), wrapAsync(medicalHistoryController.delete))
 
 
 module.exports = router;
