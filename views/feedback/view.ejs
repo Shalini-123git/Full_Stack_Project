@@ -1,0 +1,71 @@
+<% layout("layouts/boilerplate") %>
+<body>
+  <h1>Government Feedback Dashboard</h1>
+
+  <h2>Hospital Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Hospital</th>
+        <th>Average Rating</th>
+        <th>Total Feedbacks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% stats.forEach(s => { %>
+        <tr>
+          <td><%= s._id %></td>
+          <td><%= s.avgRating.toFixed(2) %></td>
+          <td><%= s.totalFeedbacks %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <h2>All Feedback</h2>
+
+  <!-- Hospital filter dropdown -->
+  <label for="hospitalFilter">Filter by Hospital: </label>
+  <select id="hospitalFilter" onchange="filterFeedback()">
+    <option value="all">All</option>
+    <% stats.forEach(s => { %>
+      <option value="<%= s._id %>"><%= s._id %></option>
+    <% }) %>
+  </select>
+
+  <table id="feedbackTable">
+    <thead>
+      <tr>
+        <th>Hospital</th>
+        <th>Rating</th>
+        <th>Comment</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% feedbacks.forEach(fb => { %>
+        <tr data-hospital="<%= fb.hospitalName %>">
+          <td><%= fb.hospitalName %></td>
+          <td><%= fb.rating %></td>
+          <td><%= fb.comment %></td>
+          <td><%= fb.createdAt.toDateString() %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <script>
+    function filterFeedback() {
+      const filter = document.getElementById("hospitalFilter").value;
+      const rows = document.querySelectorAll("#feedbackTable tbody tr");
+
+      rows.forEach(row => {
+        if (filter === "all" || row.dataset.hospital === filter) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    }
+  </script>
+</body>
