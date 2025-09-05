@@ -6,5 +6,5 @@ ENV PUPPETEER_SKIP_DOWNLOAD=true \
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm ci || npm install
 CMD ["node", "app.js"]
