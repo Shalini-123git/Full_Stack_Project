@@ -17,7 +17,7 @@ async function generatePdfFromRoute(url, filename, req, res){
         return {
             name,
             value: rest.join("="),
-            domain: "localhost", // adjust if using custom domain
+            domain: req.hostname, // adjust if using custom domain
         };
         });
         await page.setCookie(...cookies);
