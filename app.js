@@ -24,6 +24,9 @@ const dbUrl = process.env.ATLASDB_URL;
 const chatBot = require("./routes/chatBot.js");
 const checklistRoutes = require("./routes/checklist");
 const adminRoute = require("./routes/admin.js");
+const bills = require("./routes/bill.js");
+const moodJournal = require("./routes/moodJournal.js");
+const feedback = require("./routes/feedback.js");
 
 main()
    .then(() => {
@@ -114,6 +117,15 @@ app.use("/api/checklist", checklistRoutes);
 
 //admin(doctor) route
 app.use("/admin", adminRoute);
+
+//bills
+app.use("/bills", bills);
+
+//mood journal of mother
+app.use("/moodjournal", moodJournal);
+
+//feedback
+app.use("/feedback", feedback);
 
 app.listen(port, () => {
     console.log(`server is listening to port ${port}`);
