@@ -6,7 +6,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "puppeteer browsers install chrome"
   },
   "author": "",
   "license": "ISC",
@@ -36,7 +37,7 @@
     "nodemailer": "^7.0.5",
     "path": "^0.12.7",
     "pdf-parse": "^1.1.1",
-    "puppeteer": "^24.18.0",
+    "puppeteer": "^24.19.0",
     "tesseract.js": "^6.0.1",
     "twilio": "^5.8.0"
   }
