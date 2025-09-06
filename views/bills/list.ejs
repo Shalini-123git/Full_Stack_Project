@@ -1,43 +1,106 @@
-<% layout("layouts/boilerplate") %>
-<body>
-  <h2>Upload Hospital Bill</h2>
+<% layout('/layouts/boilerplate') -%>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h2 class="mb-4">Hospital Bills</h2>
+    <form action="/bills/upload" method="get">
+      <button>Upload Hospital Bill</button>
+    </form>
 
-  <form action="/bills/upload" method="POST" enctype="multipart/form-data">
-    <label for="hospitalName">Hospital Name:</label><br>
-    <input type="text" id="hospitalName" name="hospital" required><br><br>
-    <h3>Bill Items</h3>
-    <div id="items-container">
-      <div class="item-row">
-        <input type="text" name="items[][name]" placeholder="Item name" required>
-        <input type="number" name="items[][cost]" placeholder="Cost" required>
-        <button type="button" onclick="removeItem(this)">❌</button>
+    <% bills.forEach((bill, billIndex) => { %>
+      <div class="card shadow-sm mb-4 rounded-4">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Hospital: <%= bill.hospital %></h4>
+        </div>
+        <div class="card-body">
+
+          <!-- Items -->
+          <h5>Items</h5>
+          <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Item</th>
+                <th>Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% bill.items.forEach((item, i) => { %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td><%= item.name %></td>
+                  <td>₹<%= item.cost.toFixed(2) %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+
+          <!-- Total -->
+          <div class="alert alert-info fw-bold">
+            Total: ₹<%= bill.total.toFixed(2) %>
+          </div>
+
+          <!-- Analyzed Report -->
+          <h5>Analyzed Report</h5>
+
+          <!-- Overcharged -->
+          <% if (bill.analyzedReport?.overcharged?.length > 0) { %>
+            <h6 class="text-danger">⚠️ Overcharged Items</h6>
+            <table class="table table-sm table-bordered">
+              <thead class="table-danger">
+                <tr>
+                  <th>Item</th>
+                  <th>Charged</th>
+                  <th>Average</th>
+                  <th>Difference</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% bill.analyzedReport.overcharged.forEach(o => { %>
+                  <tr>
+                    <td><%= o.item %></td>
+                    <td>₹<%= o.charged.toFixed(2) %></td>
+                    <td>₹<%= o.avg.toFixed(2) %></td>
+                    <td class="fw-bold text-danger">+₹<%= o.diff.toFixed(2) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <p class="text-muted">No overcharged items.</p>
+          <% } %>
+
+          <!-- Fair -->
+          <% if (bill.analyzedReport?.fair?.length > 0) { %>
+            <h6 class="text-success mt-3">✅ Fairly Charged Items</h6>
+            <table class="table table-sm table-bordered">
+              <thead class="table-success">
+                <tr>
+                  <th>Item</th>
+                  <th>Charged</th>
+                  <th>Average</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% bill.analyzedReport.fair.forEach(f => { %>
+                  <tr>
+                    <td><%= f.item %></td>
+                    <td>₹<%= f.charged.toFixed(2) %></td>
+                    <td>₹<%= f.avg.toFixed(2) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <p class="text-muted">No fairly charged items.</p>
+          <% } %>
+
+        </div>
+        <div class="card-footer text-muted text-end">
+          Created: <%= bill.createdAt.toLocaleDateString() %> |
+          Updated: <%= bill.updatedAt.toLocaleDateString() %>
+        </div>
       </div>
-    </div>
-    <br>
-    <button type="button" onclick="addItem()">➕ Add Item</button>
-    <br><br>
+    <% }) %>
 
-    <button type="submit">Submit Bill</button>
-  </form>
-   <script>
-    function addItem() {
-      const container = document.getElementById("items-container");
-
-      // Create new item row
-      const newRow = document.createElement("div");
-      newRow.classList.add("item-row");
-
-      newRow.innerHTML = `
-        <input type="text" name="items[][name]" placeholder="Item name" required>
-        <input type="number" name="items[][cost]" placeholder="Cost" required>
-        <button type="button" onclick="removeItem(this)">❌</button>
-      `;
-
-      container.appendChild(newRow);
-    }
-
-    function removeItem(button) {
-      button.parentElement.remove();
-    }
-  </script>
+  </div>
 </body>
