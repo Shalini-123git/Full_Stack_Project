@@ -2,7 +2,7 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 
 async function generatePdfFromRoute(url, filename, req, res){
-    console.log("Chromium executable path:", puppeteer.executablePath()); // ✅ debug log
+    console.log("Chromium executable path:", puppeteer.executablePath()); // debug log
     const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
