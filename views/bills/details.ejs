@@ -1,17 +1,22 @@
 <% layout("layouts/boilerplate") %>
-<body>
-  <h2>Bill for <%= bill.hospital %></h2>
-  <p>Total Amount: ₹<%= bill.total %></p>
 
-  <h3>Breakdown:</h3>
+<div class="card p-4 shadow">
+  <h2>Bill Details</h2>
+  <p><strong>Patient Name:</strong> <%= bill.patientName %></p>
+  <p><strong>Total Amount:</strong> ₹<%= bill.totalAmount.toLocaleString() %></p>
+  <p><strong>Date:</strong> <%= bill.createdAt.toDateString() %></p>
+  <p><strong>File URL:</strong> <a href="<%= bill.fileUrl %>" target="_blank">View Original</a></p>
+
+  <h4>Analysis</h4>
   <ul>
-    <% bill.items.forEach(item => { %>
-      <li>
-        <%= item.name %> - ₹<%= item.cost %> 
-        <% if (item.isOvercharged) { %>
-          <strong style="color:red;">(Overcharged!)</strong>
-        <% } %>
-      </li>
+    <% bill.analysis.warnings.forEach(w => { %>
+      <li class="text-danger"><%= w %></li>
     <% }) %>
   </ul>
-</body>
+
+  <h4>Extracted Text</h4>
+  <pre style="white-space: pre-wrap;"><%= bill.rawText %></pre>
+
+  <a href="/bills/view" class="btn btn-secondary mt-3">Back to Bills</a>
+</div>
+
