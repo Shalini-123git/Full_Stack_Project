@@ -6,7 +6,7 @@ async function generatePdfFromRoute(url, filename, req, res){
     const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
+        executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe" || process.env.PUPPETEER_EXECUTABLE_PATH
     });
     
     const page = await browser.newPage();
