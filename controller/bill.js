@@ -1,113 +1,111 @@
-const Bill = require("../models/bill");
-const HospitalCost = require("../models/hospitalCost");
-const fs = require("fs");
-const Tesseract = require("tesseract.js");
-const pdfParse = require("pdf-parse");
-const axios = require("axios");
+const { extractTextFromUrl } = require("../utils/parse.js");
+const Bill = require("../models/Bill");
+const auditLog = require("../utils/auditLog.js");
 
-//parse bill
-async function parseBillFile(fileUrl) {
-  try {
-    console.log("Fetching from Cloudinary:", fileUrl);
+// Parse hospital bill text
+function parseHospitalBill(text) {
+  const totalMatch = text.match(/Total\s*[:\-]?\s*₹?([\d,]+)/i);
+  const patientMatch = text.match(/Patient\s*Name[:\-]?\s*(.*)/i);
 
-    // Download file from Cloudinary
-    const response = await axios.get(fileUrl, { responseType: "arraybuffer" });
-
-    // Parse PDF
-    const pdfData = await pdfParse(Buffer.from(response.data));
-
-    console.log("✅ PDF parsed successfully");
-    return pdfData.text;
-  } catch (err) {
-    console.error("❌ PDF parsing failed:", err.message);
-    throw new Error("Uploaded file is not a valid PDF or could not be parsed.");
-  }
+  return {
+    patientName: patientMatch ? patientMatch[1].trim() : "Unknown",
+    totalAmount: totalMatch ? parseInt(totalMatch[1].replace(/,/g, "")) : 0,
+    rawText: text,
+  };
 }
 
-module.exports.uploadAndAnalyzeBill = async (req, res) => {
-  const file = req.file;
-  console.log(file) // file upload
-  const data = req.body; // manual form data
-  console.log(data)
-  let parsedText = "";
-  if (file) {
-    parsedText = await parseBillFile(file.path, file.mimetype);
-    fs.unlinkSync(file.path); // cleanup
+// Analyze costs
+function analyzeCosts(data) {
+  let warnings = [];
+  if (data.totalAmount > 100000) {
+    warnings.push("High bill amount! Consider insurance claim verification.");
   }
+  return { warnings };
+}
 
-  // Calculate total
-  const total = items.reduce((sum, i) => sum + parseInt(i.cost), 0);
+// Handle Upload
+exports.uploadAndAnalyzeBill = async (req, res) => {
+  try {
+    const userId = req.user.user ? req.user.user._id : null; 
+    if (!userId) return res.status(401).send("Unauthorized: Please login");
 
-  // Analyze against reference DB
-  let overcharged = [];
-  let fair = [];
+    // Determine input type
+    let filePathOrUrl = null;
 
-  for (let item of items) {
-    const ref = await HospitalCost.findOne({ item: item.name });
-    if (ref) {
-      if (item.cost > ref.avgCost * 1.5) {
-        overcharged.push({
-          item: item.name,
-          charged: item.cost,
-          avg: ref.avgCost,
-          diff: item.cost - ref.avgCost,
-        });
-      } else {
-        fair.push({
-          item: item.name,
-          charged: item.cost,
-          avg: ref.avgCost,
-        });
-      }
+    if (req.body.fileUrl) filePathOrUrl = req.body.fileUrl;      // URL from form
+    else if (req.file) filePathOrUrl = req.file.path;            // Uploaded file
+    else return res.status(400).send("No file or URL provided");
+
+    // Step 1: Extract text
+    const text = await extractTextFromUrl(filePathOrUrl);
+
+    // Step 2: Parse + analyze
+    const parsedData = parseHospitalBill(text);
+    const analysis = analyzeCosts(parsedData);
+
+    // Step 3: Save bill
+    const bill = new Bill({
+      ...parsedData,
+      analysis,
+      fileUrl: filePathOrUrl,
+      userId
+    });
+    await bill.save();
+
+    await auditLog(req, "bill/upload", {
+      billId: bill._id,
+      patientName: parsedData.patientName,
+      totalAmount: parsedData.totalAmount
+    });
+
+    // Step 4: Respond
+    if (req.headers.accept && req.headers.accept.includes("application/json")) {
+      // API call
+      res.json({ success: true, bill });
+    } else {
+      // Web form (EJS)
+      res.redirect("/bills/view");
     }
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error analyzing bill: " + err.message);
   }
-
-  // Save bill
-  const newBill = new Bill({
-    hospital,
-    items,
-    total,
-    analyzedReport: { overcharged, fair },
-  });
-  await newBill.save();
-
-  // Return JSON API response
-  res.json({
-    success: true,
-    billId: newBill._id,
-    hospital,
-    total,
-    analyzedReport: { overcharged, fair },
-    parsedText, // only if file was uploaded
-  });
 };
 
-// Render upload form
-module.exports.renderUploadForm = (req, res) => {
-  res.render("bills/upload");
+// Show Upload Form
+exports.showUploadForm = (req, res) => {
+  res.render("bills/upload", { user: req.user.user });
 };
 
-// List all bills
-module.exports.listBills = async (req, res) => {
-  const bills = await Bill.find();
-  res.render("bills/list", { bills });
+// Show all bills
+exports.showAllBills = async (req, res) => {
+    const bills = await Bill.find({userId: req.user.user._id}).sort({ createdAt: -1 });
+
+    await auditLog(req, "bill/list", { count: bills.length });
+    res.render("bills/list", { bills });
 };
 
-// Hospital cost comparison page
-module.exports.compareHospitals = async (req, res) => {
-  const hospitals = await HospitalCost.find({}); // can aggregate ethics ratings later
-  console.log(hospitals);
-  res.render("bills/compare", {hospitals});
+// Web View: Show single bill
+exports.showBillDetails = async (req, res) => {
+    const bill = await Bill.findById(req.params.id);
+    if (!bill) return res.status(404).send("Bill not found");
+
+    await auditLog(req, "bill/view", {
+      billId: bill._id,
+      totalAmount: bill.totalAmount
+    });
+    res.render("bills/details", { bill });
 };
 
-// Bill details page
-module.exports.getBillDetails = async (req, res) => {
-  const { id} = req.params;
-  console.log("this is id", id);
-  const bill = await Bill.findById(id);
-  console.log("generated bill", bill)
-  res.render("bills/details", { bill });
-};
-
-
+module.exports.deleteBill = async (req, res) => {
+  const { id } = req.params;
+      await Bill.findByIdAndDelete(id);
+  
+      // Audit log for delete
+      await auditLog(req, "bill/delete", {
+          billId: id
+      });
+      res.redirect(`/bills/view`);
+}
 
