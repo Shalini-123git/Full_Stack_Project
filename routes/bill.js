@@ -1,23 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const billController = require("../controller/bill.js");
+const { cookieJwtAuth, restrictTo } = require("../middleware/auth.js");
+const cookieParser = require("cookie-parser");
 const wrapAsync = require("../utils/wrapAsync.js");
-const { upload } = require("../cloudConfig.js")
 
-// Render upload form
+router.use(cookieParser());
+router.use(cookieJwtAuth);
+
+// Show upload form - Handle form submission
 router.route("/upload")
-    .get(billController.renderUploadForm)
-    .post(
-        upload.single("billFile"),
-        wrapAsync(billController.uploadAndAnalyzeBill))
-    
-// List all bills
-router.get("/list", wrapAsync(billController.listBills));
+    .get(billController.showUploadForm)
+    .post(restrictTo("mother", "admin"), wrapAsync(billController.uploadAndAnalyzeBill))
 
-// Hospital cost comparison
-router.get("/compare", wrapAsync(billController.compareHospitals));
+// Web Views
+router.get("/view", restrictTo("mother","doctor", "admin"), wrapAsync(billController.showAllBills));
 
-// View bill details
-router.get("/:id", wrapAsync(billController.getBillDetails));
+router.get("/view/:id", wrapAsync(billController.showBillDetails));
+
+router.delete("/view/:id", wrapAsync(billController.deleteBill))
 
 module.exports = router;
