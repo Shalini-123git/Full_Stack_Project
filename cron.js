@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const cron = require("node-cron");
 const User = require("./models/user");
 const BabyActivity = require("./models/babyActivity");
+const runBackup = require("./utils/backup");
 
 const sendMailAllUser = () => {
 
@@ -51,6 +52,16 @@ const sendMailAllUser = () => {
     }
     });
 }
+
+const backUp = (uri) => {
+    //schedule backup every day at 2 AM
+    cron.schedule("0 2 * * *", () => {
+        console.log("starting scheduled backup");
+        runBackup(uri);
+    });
+}
+
 module.exports = {
-    sendMailAllUser
+    sendMailAllUser,
+    backUp
 }
