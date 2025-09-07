@@ -32,7 +32,7 @@ router.route("/:id")
         createReportValidator, 
         wrapAsync(reportController.update)
     )
-    .delete(restrictTo("doctor"), wrapAsync(reportController.delete))
+    .delete(restrictTo("admin"), wrapAsync(reportController.delete))
 
 router.get("/:id/printView", wrapAsync(reportController.printView))
 router.get("/:id/generatePdf", wrapAsync(reportController.generatePdf))
