@@ -1,31 +1,35 @@
 const mongoose = require("mongoose");
 
 const billSchema = new mongoose.Schema({
-  hospital: { type: String, required: true },
-  items: [
-    {
-      name: { type: String, required: true },
-      cost: { type: Number, required: true }
-    }
-  ],
-  total: { type: Number, required: true },
-  analyzedReport: {
-    overcharged: [
-      {
-        item: String,
-        charged: Number,
-        avg: Number,
-        diff: Number
-      }
-    ],
-    fair: [
-      {
-        item: String,
-        charged: Number,
-        avg: Number
-      }
-    ]
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "User", 
+    required: true 
+  }, // linked user
+  patientName: { 
+    type: String, 
+    required: true 
+  },
+  totalAmount: { 
+    type: Number, 
+    required: true 
+  },
+  rawText: { 
+    type: String, 
+    required: true 
+  },
+  analysis: { 
+    type: Object, 
+    required: true 
+  },
+  fileUrl: { 
+    type: String, 
+    required: true 
+  },
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
   }
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model("Bill", billSchema);
