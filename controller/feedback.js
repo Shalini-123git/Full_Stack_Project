@@ -1,4 +1,5 @@
 const Feedback = require("../models/hospitalFeedback");
+const auditLog = require("../utils/auditLog");
 
 module.exports.index = (req, res) => {
     res.render("feedback/feedback.ejs");
@@ -13,7 +14,7 @@ module.exports.createFeedback = async (req, res) => {
     comment
   });
   await feedback.save();
-
+  await auditLog(req, "feedback/created", { hospitalName, rating });
   res.send("thankyou for giving feedback");
 }
 
@@ -31,5 +32,8 @@ module.exports.viewGovDashboard = async (req, res) => {
     }
   ]);
 
+  await auditLog(req, "feedback/view", { 
+    feedbackCount: feedbacks.length,
+    hospitalStatsCount: stats.length});
   res.render("feedback/view", { feedbacks, stats });
 };

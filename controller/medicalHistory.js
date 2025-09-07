@@ -1,5 +1,6 @@
 const MedicalHistory = require("../models/medicalHistory.js");
 const generatePdfFromRoute = require("../utils/pdfGenerator.js");
+const auditLog = require("../utils/auditLog.js"); 
 
 //index
 module.exports.index = async (req, res) => {
@@ -32,6 +33,9 @@ module.exports.create = async (req, res) => {
     console.log(newMedicalHistory)
     await newMedicalHistory.save();
 
+    // log creation
+    await auditLog(req, "medicalHistory/created", { id: newMedicalHistory._id, bloodType });
+
     res.redirect("/medicalHistory");
     
 }
@@ -56,6 +60,7 @@ module.exports.generatePdf = async (req, res) => {
     const url = `${req.protocol}://${req.get("host")}/medicalHistory/${req.params.id}/printView`;
     const fileName = `MedicalHistory.pdf`;
 
+    await auditLog(req, "medicalHistory/pdf_generated", { id });
     await generatePdfFromRoute(url, fileName, req, res);
 }
 
@@ -67,21 +72,24 @@ module.exports.edit = async (req, res) => {
     if(!medicalHistory) {
         res.redirect("/medicalHistory");
     }
-    
+    await auditLog(req, "medicalHistory/updated", { id });
     res.render("medicalHistory/edit.ejs", { medicalHistory });
 }
  
 //update
 module.exports.update = async (req, res) => {
     let { id } = req.params;
-    let updatedReportHistory = await MedicalHistory.findByIdAndUpdate(id, {...req.body});
+    await MedicalHistory.findByIdAndUpdate(id, {...req.body});
  
-    console.log(updatedReportHistory);
+    await auditLog(req, "medicalHistory/updated", { id });
+
     res.redirect(`/medicalHistory`);
 }
 
 //delete
 module.exports.delete = async (req, res) => {
     await MedicalHistory.findByIdAndDelete(req.params.id);
+
+    await auditLog(req, "medicalHistory/deleted", { id });
     res.redirect("/admin/medicalHistory");
 }

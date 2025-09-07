@@ -1,5 +1,6 @@
 const Appointment = require("../models/appointment.js");
 const User = require("../models/user.js");
+const auditLog = require("../utils/auditLog.js");
 
 module.exports.index = async (req, res) => {
     const userId = req.user.user._id;
@@ -27,6 +28,13 @@ module.exports.create = async (req, res) => {
     });
   
     await newAppointment.save();
+
+    await auditLog(req.user.user._id, "appointments/created", { 
+        id: newAppointment._id, 
+        doctor, 
+        mother, 
+        appointmentDate 
+    });
     res.redirect(`/appointments`);
 }
 
@@ -57,12 +65,15 @@ module.exports.update = async (req, res) => {
     console.log(req.body)
     Appointment.findByIdAndUpdate(id, {...req.body});
     
+    await auditLog(req.user.user._id, "appointments/updated", { id });
+
     res.redirect(`/appointments/${id}/show`);
 }
 module.exports.delete = async (req, res) => {
     const { id } = req.params;
     await Appointment.findByIdAndDelete(id);
     
+    await auditLog(req.user.user._id, "appointments/deleted", { id });
     res.redirect(`/admin/appointments`);
 }
 
