@@ -87,6 +87,8 @@ app.use((req, res, next) => {
     next();
 });
 
+//backup function call everyday at 2 AM
+customCron.backUp(process.env.ATLASDB_URL);
 
 //function call for email send
 customCron.sendMailAllUser();
