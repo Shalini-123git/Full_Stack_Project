@@ -1,5 +1,5 @@
 const { extractTextFromUrl } = require("../utils/parse.js");
-const Bill = require("../models/Bill");
+const Bill = require("../models/bill.js");
 const auditLog = require("../utils/auditLog.js");
 
 // Parse hospital bill text
