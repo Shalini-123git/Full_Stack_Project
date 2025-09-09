@@ -23,21 +23,27 @@ function analyzeCosts(data) {
   return { warnings };
 }
 
-// Handle Upload
+// Upload + Analyze Bill
 exports.uploadAndAnalyzeBill = async (req, res) => {
   try {
-    const userId = req.user.user ? req.user.user._id : null; 
+    const userId = req.user?.user?._id || null;
     if (!userId) return res.status(401).send("Unauthorized: Please login");
 
-    // Determine input type
-    let filePathOrUrl = null;
+    // Input: Either file URL or uploaded file
+    let filePathOrUrl;
+    let mimeType = "";
 
-    if (req.body.fileUrl) filePathOrUrl = req.body.fileUrl;      // URL from form
-    else if (req.file) filePathOrUrl = req.file.path;            // Uploaded file
-    else return res.status(400).send("No file or URL provided");
+    if (req.body.fileUrl) {
+      filePathOrUrl = req.body.fileUrl;
+    } else if (req.file) {
+      filePathOrUrl = req.file.path;
+      mimeType = req.file.mimetype;
+    } else {
+      return res.status(400).send("No file or URL provided");
+    }
 
     // Step 1: Extract text
-    const text = await extractTextFromUrl(filePathOrUrl);
+    const text = await extractTextFromUrl(filePathOrUrl, mimeType);
 
     // Step 2: Parse + analyze
     const parsedData = parseHospitalBill(text);
@@ -48,22 +54,21 @@ exports.uploadAndAnalyzeBill = async (req, res) => {
       ...parsedData,
       analysis,
       fileUrl: filePathOrUrl,
-      userId
+      userId,
     });
     await bill.save();
 
+    // Step 4: Audit log
     await auditLog(req, "bill/upload", {
       billId: bill._id,
       patientName: parsedData.patientName,
-      totalAmount: parsedData.totalAmount
+      totalAmount: parsedData.totalAmount,
     });
 
-    // Step 4: Respond
+    // Step 5: Respond
     if (req.headers.accept && req.headers.accept.includes("application/json")) {
-      // API call
       res.json({ success: true, bill });
     } else {
-      // Web form (EJS)
       res.redirect("/bills/view");
     }
 
