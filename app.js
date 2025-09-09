@@ -9,24 +9,15 @@ const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
-const userRouter = require("./routes/users.js");
-const reports = require("./routes/reports.js");
-const timelines = require("./routes/timeline.js");
-const reportHistory = require("./routes/medicalHistory.js");
-const babyLogs = require("./routes/babyActivity.js");
-const appointments = require("./routes/appointment");
+const sessionOptions = require("./config/session.js");
 const customCron = require("./cron.js");
 const ejsMate = require("ejs-mate");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken")
-const dbUrl = process.env.ATLASDB_URL;
-const chatBot = require("./routes/chatbot.js");
-const checklistRoutes = require("./routes/checklist");
-const adminRoute = require("./routes/admin.js");
-const bills = require("./routes/bill.js");
-const moodJournal = require("./routes/moodJournal.js");
-const feedback = require("./routes/feedback.js");
+const jwt = require("jsonwebtoken");
+const enableQueryLogger = require("./config/db.js");
+
+//log query on console
+enableQueryLogger();
 
 main()
    .then(() => {
@@ -37,27 +28,7 @@ main()
    });
 
 async function main(){
-    await mongoose.connect(dbUrl);
-}
-
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret: process.env.SECRET,
-    },
-    touchAfter: 24 * 3600,
-});
-
-store.on("error", () => {
-    console.log("ERROR IN MONGO SESSION STORE", err);
-});
-
-const sessionOptions = {
-    store,
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {httpOnly: true, maxAge: 1000*60*60*24}  //1 day
+    await mongoose.connect(process.env.ATLASDB_URL);
 }
 
 app.set("view engine", "ejs");
@@ -93,41 +64,18 @@ customCron.backUp(process.env.ATLASDB_URL);
 //function call for email send
 customCron.sendMailAllUser();
 
-//middleware for routes
-app.use("/", userRouter);
-
-// reports route
-app.use("/report", reports);
-
-// timeline
-app.use("/timeline", timelines);
-
-//report History
-app.use("/medicalHistory", reportHistory);
-
-//appointments
-app.use("/appointments", appointments);
-
-//baby Activity
-app.use("/activities", babyLogs);
-
-//whatsapp Bot
-app.use("/api", chatBot);
-
-//week wise checklist
-app.use("/api/checklist", checklistRoutes);
-
-//admin(doctor) route
-app.use("/admin", adminRoute);
-
-//bills
-app.use("/bills", bills);
-
-//mood journal of mother
-app.use("/moodjournal", moodJournal);
-
-//feedback
-app.use("/feedback", feedback);
+app.use("/", require("./routes/users"));
+app.use("/report", require("./routes/reports"));
+app.use("/timeline", require("./routes/timeline"));
+app.use("/medicalHistory", require("./routes/medicalHistory"));
+app.use("/appointments", require("./routes/appointment"));
+app.use("/activities", require("./routes/babyActivity"));
+app.use("/api", require("./routes/chatbot"));
+app.use("/api/checklist", require("./routes/checklist"));
+app.use("/admin", require("./routes/admin"));
+app.use("/bills", require("./routes/bill"));
+app.use("/moodjournal", require("./routes/moodJournal"));
+app.use("/feedback", require("./routes/feedback"));
 
 app.listen(port, () => {
     console.log(`server is listening to port ${port}`);
