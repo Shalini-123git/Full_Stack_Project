@@ -4,7 +4,7 @@ const auditLog = require("../utils/auditLog.js");
 
 module.exports.index = async (req, res) => {
     const userId = req.user.user._id;
-    const appointment = await Appointment.find(userId.mother, userId.doctor, userId.caregiver)
+    const appointment = await Appointment.find(userId.mother || userId.doctor || userId.caregiver)
         .populate("mother")
         .populate("doctor")
         .populate("caregiver")

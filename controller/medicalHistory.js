@@ -60,7 +60,7 @@ module.exports.generatePdf = async (req, res) => {
     const url = `${req.protocol}://${req.get("host")}/medicalHistory/${req.params.id}/printView`;
     const fileName = `MedicalHistory.pdf`;
 
-    await auditLog(req, "medicalHistory/pdf_generated", { id });
+    await auditLog(req, "medicalHistory/pdf_generated", { id: req.params.id});
     await generatePdfFromRoute(url, fileName, req, res);
 }
 
@@ -90,6 +90,6 @@ module.exports.update = async (req, res) => {
 module.exports.delete = async (req, res) => {
     await MedicalHistory.findByIdAndDelete(req.params.id);
 
-    await auditLog(req, "medicalHistory/deleted", { id });
+    await auditLog(req, "medicalHistory/deleted", { id: req.params.id });
     res.redirect("/admin/medicalHistory");
 }

@@ -16,7 +16,7 @@ router.route("/:id")
     .get(appointmentController.show)
     .put(restrictTo("mother", "doctor"), wrapAsync(appointmentController.update))
 
-router.delete("/admin/:id", restrictTo("doctor"), wrapAsync(appointmentController.delete))
+router.delete("/admin/:id", restrictTo("doctor", "admin"), wrapAsync(appointmentController.delete))
 
 
 router.get("/", wrapAsync(appointmentController.index))
