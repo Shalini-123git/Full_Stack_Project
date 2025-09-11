@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userController = require("../controller/users.js");
+const userController = require("../controller/authController.js");
 const { validateLogin } = require("../middleware/validation.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 
