@@ -36,7 +36,7 @@ module.exports.create = async (req, res) => {
     // log creation
     await auditLog(req, "medicalHistory/created", { id: newMedicalHistory._id, bloodType });
 
-    res.redirect("/medicalHistory");
+    res.redirect(`/medicalHistory`);
     
 }
 
@@ -83,7 +83,7 @@ module.exports.update = async (req, res) => {
  
     await auditLog(req, "medicalHistory/updated", { id });
 
-    res.redirect(`/medicalHistory`);
+    res.redirect(`/medicalHistory/${id}/show`);
 }
 
 //delete

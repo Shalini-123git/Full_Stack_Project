@@ -63,11 +63,11 @@ module.exports.edit = async (req, res) => {
 module.exports.update = async (req, res) => {
     let { id } = req.params;
     console.log(req.body)
-    Appointment.findByIdAndUpdate(id, {...req.body});
+    await Appointment.findByIdAndUpdate(id, {...req.body});
     
-    await auditLog(req.user.user._id, "appointments/updated", { id });
+    await auditLog(req, "appointments/updated", { id });
 
-    res.redirect(`/appointments/${id}/show`);
+    res.redirect(`/appointments/${id}`);
 }
 module.exports.delete = async (req, res) => {
     const { id } = req.params;

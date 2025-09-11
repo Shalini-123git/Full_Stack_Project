@@ -25,15 +25,13 @@ module.exports.newTimeline = async (req, res) => {
 }
 
 module.exports.index = async (req, res) => {
-    const timeline = await Timeline.findOne({ userId: req.user.user._id });
-
-    if (!timeline) {
+    const timelines = await Timeline.find({ userId: req.user.user._id });
+    
+    if (!timelines) {
       return res.redirect("/timeline/create");
     }
 
-    const currentWeek = getCurrentPregnancyWeek(timeline.pregnancyStartDate);
-    console.log(currentWeek)
-    res.render("timeline/index.ejs", {timeline});
+    res.render("timeline/index.ejs", {timelines});
 }
 
 //Print
@@ -99,14 +97,17 @@ module.exports.getEvent = async (req, res) => {
 module.exports.createEvent = async (req, res) => {
    
     const { title, description, eventDate } = req.body;
+    console.log("title", title, description, eventDate)
     if (!title || !eventDate) {
         return res.status(400).json({ message: "Title and eventdate are required" });
     }
 
-    const timeline = await Timeline.findOne({_id: req.params.id});
-    if (!timeline) {
+    const timelines = await Timeline.find({_id: req.params.id});
+    if (!timelines) {
         return res.status(404).json({ message: "Timeline not found" });
     }
+
+    const timeline = timelines[0];
 
     timeline.events.push({
         title,

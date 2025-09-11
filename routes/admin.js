@@ -22,8 +22,8 @@ router.get("/medicalHistory", accessTo("doctor", "admin"), async (req, res) => {
 })
 
 router.get("/timeline", accessTo("doctor", "admin"), async (req, res) => {
-    const timeline = await Timeline.find({});
-    res.render("timeline/index.ejs", {timeline});
+    const timelines = await Timeline.find({});
+    res.render("timeline/index.ejs", {timelines});
 })
 
 router.get("/checklist", accessTo("doctor", "admin"), async (req, res) => {

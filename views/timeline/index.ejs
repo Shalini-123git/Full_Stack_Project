@@ -1,61 +1,62 @@
 <% layout('/layouts/boilerplate') -%>
 <body>
-    <form action="/timeline/generatePdf" method="GET">
-        <button>Download Pdf</button>
-    </form>
-    <h1>Pregnancy Timelines</h1>
-    <a href="/timeline/create">Add New</a>
-    <br>
-    <a href="/timeline/<%= timeline.id %>/events">Add Event</a>
-    <br>
-    <a href="/timeline/<%= timeline.id %>/events">Add milestones</a>
-    <br>
-    <h1>Pregnancy Timeline</h1>
+  <form action="/timeline/generatePdf" method="GET">
+    <button>Download Pdf</button>
+  </form>
 
-  <% if (timeline) { %>
-    <div class="box">
-      <p><strong>Pregnancy Start Date:</strong> <%= timeline.pregnancyStartDate %></p>
-      <p><strong>Due Date:</strong> <%= timeline.dueDate ? timeline.dueDate : "Not set" %></p>
-    </div>
+  <h1>Pregnancy Timelines</h1>
+  <a href="/timeline/create">Add New</a>
 
-    <h2>Events</h2>
-    <% if (timeline.events && timeline.events.length > 0) { %>
-      <% timeline.events.forEach(event => { %>
-        <div class="box">
-          <p><strong>Title:</strong> <%= event.title %></p>
-          <p><strong>Date:</strong> <%= event.eventDate%></p>
-          <p><strong>Category:</strong> <%= event.category %></p>
-          <p><strong>Description:</strong> <%= event.description || "No description" %></p>
-        </div>
-      <% }) %>
-    <% } else { %>
-      <p>No events yet.</p>
-    <% } %>
+  <% if (timelines && timelines.length > 0) { %>
+    <% timelines.forEach(timeline => { %>
+      <hr>
+      <h2>Timeline</h2>
+      <a href="/timeline/<%= timeline._id %>/events">Add Event</a> |
+      <a href="/timeline/<%= timeline._id %>/events">Add Milestones</a>
 
-    <h2>Weekly Progress</h2>
-    <% if (timeline.weeks && timeline.weeks.length > 0) { %>
-      <% timeline.weeks.forEach(week => { %>
-        <div class="box">
-          <p><strong>Week:</strong> <%= week.week %> (<%= week.trimester %> trimester)</p>
-          <% if (week.milestones && week.milestones.length > 0) { %>
-            <ul>
-              <% week.milestones.forEach(m => { %>
-                <li><%= m.title %> - <%= m.status %></li>
-              <% }) %>
-            </ul>
-          <% } else { %>
-            <p>No milestones</p>
-          <% } %>
-        </div>
-      <% }) %>
-    <% } else { %>
-      <p>No weekly milestones yet.</p>
-    <% } %>
+      <div class="box">
+        <p><strong>Pregnancy Start Date:</strong> <%= timeline.pregnancyStartDate %></p>
+        <p><strong>Due Date:</strong> <%= timeline.dueDate ? timeline.dueDate : "Not set" %></p>
+      </div>
 
+      <h3>Events</h3>
+      <% if (timeline.events && timeline.events.length > 0) { %>
+        <% timeline.events.forEach(event => { %>
+          <div class="box">
+            <p><strong>Title:</strong> <%= event.title %></p>
+            <p><strong>Date:</strong> <%= event.eventDate %></p>
+            <p><strong>Category:</strong> <%= event.category %></p>
+            <p><strong>Description:</strong> <%= event.description || "No description" %></p>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No events yet.</p>
+      <% } %>
+
+      <h3>Weekly Progress</h3>
+      <% if (timeline.weeks && timeline.weeks.length > 0) { %>
+        <% timeline.weeks.forEach(week => { %>
+          <div class="box">
+            <p><strong>Week:</strong> <%= week.week %> (<%= week.trimester %> trimester)</p>
+            <% if (week.milestones && week.milestones.length > 0) { %>
+              <ul>
+                <% week.milestones.forEach(m => { %>
+                  <li><%= m.title %> - <%= m.status %></li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p>No milestones</p>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No weekly milestones yet.</p>
+      <% } %>
+
+    <% }) %>
   <% } else { %>
-    <p>No timeline found for this user.</p>
+    <p>No timelines found for this user.</p>
   <% } %>
 
-        <%- include('../includes/ai') %>
-       
+  <%- include('../includes/ai') %>
 </body>
