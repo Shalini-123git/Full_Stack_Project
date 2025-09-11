@@ -69,7 +69,7 @@ module.exports.printView = async (req, res) => {
     
      // Audit log for print view
     await auditLog(req, "reports/print_view", {
-        reportId: report._id,
+        reportId: report.id,
         title: report.title
     });
     res.render("reports/printView", {report});

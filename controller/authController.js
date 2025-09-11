@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const auditLog = require("../utils/auditLog");
 const { validationResult } = require("express-validator");
-const { error } = require("winston");
 
 //index
 module.exports.index = (req, res) => {
@@ -22,7 +21,8 @@ module.exports.loginPostRouter = async(req, res) => {
     const user = await User.findOne( { username });
     if(!user){
         await auditLog(req, "auth/login_failed", { username });
-        return res.json("user not found.... please insert valid username, email and password");
+        return res.json("user not found.... please insert valid username, password");
+        
     }else{
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch) return res.status(400).json({message: "Invalid Credentials"});

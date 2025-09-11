@@ -1,14 +1,26 @@
 <% layout("layouts/boilerplate") %>
-<div class="card p-4 shadow">
-  <h2>Upload Hospital Bill</h2>
 
-  <% if (user) { %>
-    <p class="text-muted">Logged in as: <%= user.username %> (<%= user.email %>)</p>
-  <% } %>
+<h2>Upload Hospital Bill</h2>
 
-  <form action="/bills/upload" method="POST">
-    <div class="mb-3">
-      <label for="fileUrl" class="form-label">Cloudinary File URL</label>
+<% if (user) { %>
+  <p>Logged in as: <%= user.username %> (<%= user.email %>)</p>
+<% } %>
+
+<form action="/bills/upload" method="POST" enctype="multipart/form-data">
+
+  <label for="patientName">Patient Name</label><br>
+  <input type="text" id="patientName" name="patientName" required><br><br>
+
+  <label for="totalAmount">Total Amount (₹)</label><br>
+  <input type="number" id="totalAmount" name="totalAmount" required><br><br>
+
+  <label for="rawText">Raw Bill Text</label><br>
+  <textarea id="rawText" name="rawText" rows="2" required></textarea><br><br>
+
+  <label for="analysis">Bill Analysis</label><br>
+  <textarea id="analysis" name="analysis" rows="2" required></textarea><br>
+
+  <label for="fileUrl" class="form-label">Cloudinary File URL</label>
       <input 
         type="url" 
         id="fileUrl" 
@@ -16,10 +28,8 @@
         class="form-control" 
         placeholder="https://res.cloudinary.com/.../bill.pdf" 
         required>
-    </div>
 
-    <button type="submit" class="btn btn-success">Analyze Bill</button>
-    <a href="/bills/view" class="btn btn-secondary">Back to Bills</a>
-  </form>
-</div>
-
+  <button type="submit">Upload Bill</button>
+  <br>
+  <a href="/bills/view">Back to Bills</a>
+</form>

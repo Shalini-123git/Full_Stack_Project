@@ -28,7 +28,7 @@ module.exports.index = async (req, res) => {
     const timeline = await Timeline.findOne({ userId: req.user.user._id });
 
     if (!timeline) {
-      return res.status(404).json({ message: "Timeline not found" });
+      return res.redirect("/timeline/create");
     }
 
     const currentWeek = getCurrentPregnancyWeek(timeline.pregnancyStartDate);

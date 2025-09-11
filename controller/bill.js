@@ -26,7 +26,7 @@ function analyzeCosts(data) {
 // Upload + Analyze Bill
 exports.uploadAndAnalyzeBill = async (req, res) => {
   try {
-    const userId = req.user?.user?._id || null;
+    const userId = req.user.user._id;
     if (!userId) return res.status(401).send("Unauthorized: Please login");
 
     // Input: Either file URL or uploaded file
@@ -36,6 +36,7 @@ exports.uploadAndAnalyzeBill = async (req, res) => {
     if (req.body.fileUrl) {
       filePathOrUrl = req.body.fileUrl;
     } else if (req.file) {
+      console.log(req.file);
       filePathOrUrl = req.file.path;
       mimeType = req.file.mimetype;
     } else {

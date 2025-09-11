@@ -3,7 +3,7 @@ const router = express.Router();
 const feedbackController = require("../controller/feedback");
 const { cookieJwtAuth, isAdmin, restrictTo } = require("../middleware/auth.js");
 const cookieParser = require("cookie-parser");
-const wrapAsync = require("../utils/wrapAsync.js")
+const wrapAsync = require("../utils/wrapAsync.js");
 
 router.use(cookieParser());
 router.use(cookieJwtAuth);
