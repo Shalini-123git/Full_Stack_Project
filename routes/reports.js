@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {cookieJwtAuth, restrictTo} = require("../middleware/auth.js");
+const {cookieJwtAuth, accessTo} = require("../middleware/auth.js");
 const {upload} = require("../cloudConfig.js");
 const { createReportValidator } = require("../middleware/validation.js");
 const cookieParser = require("cookie-parser");
@@ -14,7 +14,7 @@ router.use(cookieJwtAuth);
 router.route("/create")
     .get(reportController.newReport)
     .post(
-        restrictTo("mother", "doctor"),
+        accessTo("mother", "doctor"),
         upload.single("file"), 
         createReportValidator, 
         wrapAsync(reportController.create)
@@ -27,12 +27,12 @@ router.get("/", wrapAsync(reportController.index))
 router.route("/:id")
     .get(reportController.show)
     .put(
-        restrictTo("mother", "doctor"),
+        accessTo("mother", "doctor"),
         upload.single("file"), 
         createReportValidator, 
         wrapAsync(reportController.update)
     )
-    .delete(restrictTo("admin"), wrapAsync(reportController.delete))
+    .delete(accessTo("admin"), wrapAsync(reportController.delete))
 
 router.get("/:id/printView", wrapAsync(reportController.printView))
 router.get("/:id/generatePdf", wrapAsync(reportController.generatePdf))

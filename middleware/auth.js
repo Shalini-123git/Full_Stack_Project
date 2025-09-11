@@ -16,7 +16,7 @@ module.exports.cookieJwtAuth = (req, res, next) => {
 }
 
 // Middleware to restrict access to certain role (...roles) -> allowed
-module.exports.restrictTo = (...roles) => {
+module.exports.accessTo = (...roles) => {
     return (req, res, next) => {
         console.log("user", req.user, req.user.user.role)
         if (!req.user || !roles.includes(req.user.user.role)) {
